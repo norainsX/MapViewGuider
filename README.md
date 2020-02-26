@@ -211,7 +211,54 @@ class MapViewState: ObservableObject {
 我们来看MapView的代码需要有什么变化：
 
 ```swift
+import MapKit
+import SwiftUI
 
+struct MapView: View {
+    @ObservedObject var mapViewState: MapViewState
+    var mapViewDelegate: MapViewDelegate
+
+    var body: some View {
+        return GeometryReader { geometryProxy in
+            MapViewWrapper(frame: CGRect(x: geometryProxy.safeAreaInsets.leading,
+                                         y: geometryProxy.safeAreaInsets.trailing,
+                                         width: geometryProxy.size.width,
+                                         height: geometryProxy.size.height),
+                           mapViewState: self.mapViewState,
+                           mapViewDelegate: self.mapViewDelegate)
+        }
+    }
+}
+
+struct MapViewWrapper: UIViewRepresentable {
+    var frame: CGRect
+    @ObservedObject var mapViewState: MapViewState
+    var mapViewDelegate: MapViewDelegate
+
+    func makeUIView(context: Context) -> MKMapView {
+        let mapView = MKMapView(frame: frame)
+        mapView.delegate = mapViewDelegate
+        return mapView
+    }
+
+    func updateUIView(_ view: MKMapView, context: Context) {
+        // Set the map display region
+        if let center = mapViewState.center {
+            var region: MKCoordinateRegion
+            if let span = mapViewState.span {
+                region = MKCoordinateRegion(center: center,
+                                            span: span)
+            } else {
+                region = MKCoordinateRegion(center: center,
+                                            latitudinalMeters: CLLocationDistance(400),
+                                            longitudinalMeters: CLLocationDistance(400))
+            }
+            view.setRegion(region, animated: true)
+
+            mapViewState.center = nil
+        }
+    }
+}
 ```
 
 上述代码有如下需要注意的地方：
@@ -223,7 +270,43 @@ class MapViewState: ObservableObject {
 
 接下来，我们就需要在ContentView添加一个按钮，按下按钮的时候设置中心点位置。代码不复杂，只是稍微添加的地方有点多：
 
+```swift
+import MapKit
+import SwiftUI
+
+struct ContentView: View {
+    @ObservedObject var mapViewState = MapViewState()
+    var mapViewDelegate: MapViewDelegate?
+
+    init() {
+        mapViewDelegate = MapViewDelegate(mapViewState: self.mapViewState)
+    }
+
+    var body: some View {
+        ZStack {
+            MapView(mapViewState: mapViewState, mapViewDelegate: mapViewDelegate!)
+            
+             VStack {
+                 Spacer()
+                 Button(action: {
+                     self.mapViewState.center = CLLocationCoordinate2D(latitude: 39.9, longitude: 116.38)
+                 }
+                 ) {
+                     Text("MyLocation")
+                         .background(Color.gray)
+                         .padding()
+                 }
+             }
+             
+        }
+    }
+}
 ```
 
-```
+如果这时候你满怀信息运行此代码的话，会很沮丧地发现一个问题，就是点击按钮，无论如何都无法实现回到当前位置的效果。为什么呢？这个在之前的“设置Frame”中有提到，多层封装之后，有可能导致@ObservedObject对象无法收到变化。所以，我们这里还是要将这个二级封装简化为一层。
 
+> 如果需要这部分失败的代码，请使用git进行如下操作：
+>
+> git clone https://github.com/no-rains/MapViewGuider.git
+>
+> git checkout base.use-bad.wrapper

@@ -24,7 +24,7 @@ struct ContentView: View {
              VStack {
                  Spacer()
                  Button(action: {
-                     self.mapViewState.center = CLLocationCoordinate2D(latitude: 49.9, longitude: 116.4)
+                     self.mapViewState.center = CLLocationCoordinate2D(latitude: 39.9, longitude: 116.38)
                  }
                  ) {
                      Text("MyLocation")
