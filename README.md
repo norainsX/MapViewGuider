@@ -190,62 +190,33 @@ struct ContentView: View {
 
 ### 设置显示的中心点
 
-我们这里考虑一个常见的应用场景，就是很多地图软件都会有一个功能，点击“当前位置”按钮的时候，地图就会嗖地显示我们当前的位置。这个场景，要实现也非常容易。鉴于设计模式的原则，我们一般是将数据和状态分开，所以我们这里新建了一个MapViewState类，用来存储相关的数据。一开始很简单，这个类只是用来保存中心点和最初的缩放比例：
+我们这里考虑一个常见的应用场景，就是很多地图软件都会有一个功能，点击“当前位置”按钮的时候，地图就会嗖地显示我们当前的位置。这个场景，要实现也非常容易。
+
+首先，我们需要在MapViewState增加一个center属性来存储位置变量：
 
 ```swift
 import MapKit
 
 class MapViewState: ObservableObject {
+    var span: MKCoordinateSpan?
     @Published var center: CLLocationCoordinate2D?
 }
+
 ```
 
-这里之所以将MapViewState声明为ObservableObject，主要是我们的这些数据需要能够通知到SwiftUI的组件，因此这里将center也用@Published包装了起来。
+这里之所以将MapViewState声明为ObservableObject，以及为何要将center用@Published包装起来，主要是我们的这些数据在变化的时候需要能够通知到SwiftUI的组件。
 
-因为MapView需要用到MapViewState，因为我们需要将MapViewState的实例一直传导下去，然后在updateUIView的时候使用：
+我们来看MapView的代码需要有什么变化：
 
 ```swift
 
-struct MapView: View {
-    var mapViewState: MapViewState
-
-    var body: some View {
-        return GeometryReader { geometryProxy in
-            MapViewWrapper(mapViewState: self.mapViewState,
-                           frame: CGRect(x: geometryProxy.safeAreaInsets.leading,
-                                         y: geometryProxy.safeAreaInsets.trailing,
-                                         width: geometryProxy.size.width,
-                                         height: geometryProxy.size.height))
-        }
-    }
-}
-
-struct MapViewWrapper: UIViewRepresentable {
-    var mapViewState: MapViewState
-    var frame: CGRect
-
-    func makeUIView(context: Context) -> MKMapView {
-        let mapView = MKMapView(frame: frame)
-        return mapView
-    }
-
-    func updateUIView(_ view: MKMapView, context: Context) {
-        if let center = mapViewState.center {
-            let region = MKCoordinateRegion(center: center,
-                                            latitudinalMeters: CLLocationDistance(400),
-                                            longitudinalMeters: CLLocationDistance(400))
-            view.setRegion(region, animated: true)
-            
-            mapViewState.center = nil
-        }
-    }
-}
 ```
 
 上述代码有如下需要注意的地方：
 
 - 设置显示中心点，是由调用setRegion来实现的
 - setRegion的latitudinalMeters和longitudinalMeters是用来控制缩放的比例的
+- SetRegion的span也是控制缩放比例的，只是单位和前者不同
 - 设置之后，将mapViewState.center设置为nil，主要是为了防止刷新的时候不停地设置中心点
 
 接下来，我们就需要在ContentView添加一个按钮，按下按钮的时候设置中心点位置。代码不复杂，只是稍微添加的地方有点多：

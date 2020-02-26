@@ -10,7 +10,7 @@ import MapKit
 import SwiftUI
 
 struct MapView: View {
-    var mapViewState: MapViewState
+    @ObservedObject var mapViewState: MapViewState
     var mapViewDelegate: MapViewDelegate
 
     var body: some View {
@@ -27,7 +27,7 @@ struct MapView: View {
 
 struct MapViewWrapper: UIViewRepresentable {
     var frame: CGRect
-    var mapViewState: MapViewState
+    @ObservedObject var mapViewState: MapViewState
     var mapViewDelegate: MapViewDelegate
 
     func makeUIView(context: Context) -> MKMapView {
@@ -37,5 +37,20 @@ struct MapViewWrapper: UIViewRepresentable {
     }
 
     func updateUIView(_ view: MKMapView, context: Context) {
+        // Set the map display region
+        if let center = mapViewState.center {
+            var region: MKCoordinateRegion
+            if let span = mapViewState.span {
+                region = MKCoordinateRegion(center: center,
+                                            span: span)
+            } else {
+                region = MKCoordinateRegion(center: center,
+                                            latitudinalMeters: CLLocationDistance(400),
+                                            longitudinalMeters: CLLocationDistance(400))
+            }
+            view.setRegion(region, animated: true)
+
+            mapViewState.center = nil
+        }
     }
 }

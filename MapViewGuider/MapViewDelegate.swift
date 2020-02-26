@@ -17,6 +17,5 @@ class MapViewDelegate: NSObject, MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated: Bool) {
         mapViewState.span = mapView.region.span
-        print(mapViewState.span)
     }
 }

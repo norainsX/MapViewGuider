@@ -10,5 +10,5 @@ import MapKit
 
 class MapViewState: ObservableObject {
     var span: MKCoordinateSpan?
-    //@Published var center: CLLocationCoordinate2D?
+    @Published var center: CLLocationCoordinate2D?
 }

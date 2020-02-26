@@ -10,22 +10,21 @@ import MapKit
 import SwiftUI
 
 struct ContentView: View {
-    var mapViewState: MapViewState?
+    @ObservedObject var mapViewState = MapViewState()
     var mapViewDelegate: MapViewDelegate?
 
     init() {
-        mapViewState = MapViewState()
-        mapViewDelegate = MapViewDelegate(mapViewState: mapViewState!)
+        mapViewDelegate = MapViewDelegate(mapViewState: self.mapViewState)
     }
 
     var body: some View {
         ZStack {
-            MapView(mapViewState: mapViewState!, mapViewDelegate: mapViewDelegate!)
-            /*
+            MapView(mapViewState: mapViewState, mapViewDelegate: mapViewDelegate!)
+            
              VStack {
                  Spacer()
                  Button(action: {
-                     //self.mapViewState.center = CLLocationCoordinate2D(latitude: 49.9, longitude: 116.4)
+                     self.mapViewState.center = CLLocationCoordinate2D(latitude: 49.9, longitude: 116.4)
                  }
                  ) {
                      Text("MyLocation")
@@ -33,7 +32,7 @@ struct ContentView: View {
                          .padding()
                  }
              }
-             */
+             
         }
     }
 }
