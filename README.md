@@ -310,3 +310,56 @@ struct ContentView: View {
 > git clone https://github.com/no-rains/MapViewGuider.git
 >
 > git checkout base.use-bad.wrapper
+
+因为frame我们暂时用不上，所以这里还是直接使用.zero，然后我们将MapViewWrapper更名为MapView，而原来的MapView删掉，于是便得到如下代码：
+
+```swift
+//
+//  MapView.swift
+//  MapViewGuider
+//
+//  Created by norains on 2020/2/26.
+//  Copyright © 2020 norains. All rights reserved.
+//
+
+import MapKit
+import SwiftUI
+
+struct MapView: UIViewRepresentable {
+    @ObservedObject var mapViewState: MapViewState
+    var mapViewDelegate: MapViewDelegate
+
+    func makeUIView(context: Context) -> MKMapView {
+        let mapView = MKMapView(frame: .zero)
+        mapView.delegate = mapViewDelegate
+        return mapView
+    }
+
+    func updateUIView(_ view: MKMapView, context: Context) {
+        // Set the map display region
+        if let center = mapViewState.center {
+            var region: MKCoordinateRegion
+            if let span = mapViewState.span {
+                region = MKCoordinateRegion(center: center,
+                                            span: span)
+            } else {
+                region = MKCoordinateRegion(center: center,
+                                            latitudinalMeters: CLLocationDistance(400),
+                                            longitudinalMeters: CLLocationDistance(400))
+            }
+            view.setRegion(region, animated: true)
+
+            mapViewState.center = nil
+        }
+    }
+}
+
+```
+
+这时候运行代码，然后点击按钮，就会自动移动到当前所设定的坐标去了！
+
+>  本章的内容就此结束，如果需要本章结束时的代码，请按如下进行操作：
+>
+> git clone https://github.com/no-rains/MapViewGuider.git
+>
+> git checkout base.use

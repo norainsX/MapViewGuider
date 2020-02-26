@@ -9,29 +9,12 @@
 import MapKit
 import SwiftUI
 
-struct MapView: View {
-    @ObservedObject var mapViewState: MapViewState
-    var mapViewDelegate: MapViewDelegate
-
-    var body: some View {
-        return GeometryReader { geometryProxy in
-            MapViewWrapper(frame: CGRect(x: geometryProxy.safeAreaInsets.leading,
-                                         y: geometryProxy.safeAreaInsets.trailing,
-                                         width: geometryProxy.size.width,
-                                         height: geometryProxy.size.height),
-                           mapViewState: self.mapViewState,
-                           mapViewDelegate: self.mapViewDelegate)
-        }
-    }
-}
-
-struct MapViewWrapper: UIViewRepresentable {
-    var frame: CGRect
+struct MapView: UIViewRepresentable {
     @ObservedObject var mapViewState: MapViewState
     var mapViewDelegate: MapViewDelegate
 
     func makeUIView(context: Context) -> MKMapView {
-        let mapView = MKMapView(frame: frame)
+        let mapView = MKMapView(frame: .zero)
         mapView.delegate = mapViewDelegate
         return mapView
     }
