@@ -14,9 +14,9 @@ class MapViewState: ObservableObject {
     var pinAnnotation: PinAnnotation?
     var tracks = [CLLocationCoordinate2D(latitude: 39.9, longitude: 116.38),
                   CLLocationCoordinate2D(latitude: 39.9, longitude: 116.39)]
-
     var navigateView: SecondContentView?
     @Published var activeNavigate = false
+    var fogLayer = FogLayer()
 
     init() {
         pinAnnotation = PinAnnotation(coordinate: CLLocationCoordinate2D(latitude: 39.9, longitude: 116.38), mapViewState: self)

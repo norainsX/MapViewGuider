@@ -611,7 +611,7 @@ struct ContentView: View {
 
 ### 绘制轨迹
 
-对于轨迹的绘制，有两种比较常见的方法，一种是通过代理使用MKPolylineRenderer绘制，另外一种是直接在MapView上面再加一层SubOverlay来进行。相对于来说，前一种比较简单，容易理解，后一种就比较复杂和麻烦了。不过在本章中，这两者都会有介绍，但后续的内容，却是基于后一种SubOverlay的方式。
+对于轨迹的绘制，有两种比较常见的方法，一种是通过代理使用MKPolylineRenderer绘制，另外一种是直接在MapView上面再加一层CALayer来进行。相对于来说，前一种比较简单，容易理解，后一种就比较复杂和麻烦了。不过在本章中，这两者都会有介绍，但后续的内容，却是基于后一种CALayer的方式。
 
 但无论是哪种方式，最先要做的，都是在地图上添加轨迹。添加轨迹的方式很简单，就是根据坐标生成MKPolyline这个特殊的overlay，然后添加到MapView的视图中：
 
@@ -690,4 +690,201 @@ class MapViewDelegate: NSObject, MKMapViewDelegate {
 >
 > git checkout polyline.renderer
 
-不过MKPolylineRenderer方式虽然比较简单，但客制化一些功能的时候比较麻烦。如果仅仅只是显示轨迹的话，可能用MKPolylineRenderer就够了，但如果还需要做更多的工作，可能我们就需要接下来的SubOverlay的方式了。
+不过MKPolylineRenderer方式虽然比较简单，但客制化一些功能的时候比较麻烦。如果仅仅只是显示轨迹的话，可能用MKPolylineRenderer就够了，但如果还需要做更多的工作，可能我们就需要接下来的CALayer的方式了。
+
+####CALayer方式
+
+对于CALayer模式来说，稍微显得有点复杂，我们先一步一步理清一下。首先，由于CALayer需要用到CADisplayLink，我们来看看它是做什么的。
+
+CADisplayLink的官方定义如下：
+
+*A timer object that allows your application to synchronize its drawing to the refresh rate of the display.*
+
+翻译过来的意思就是，CADisplayLink是一个定时器对象，它可以让你与屏幕刷新频率相同的速率来刷新你的视图。简单点理解，可以认为CADisplayLink是用于同步屏幕刷新频率的计时器。
+
+在我们接下来的示例里面，主要用到它的这几个方面：
+
+1. 调用CADisplayLink的构造函数并关联定时调用的函数
+2. 实现定时调用的函数
+
+第1条很简单，如：
+
+```swift
+let link = CADisplayLink(target: self, selector: #selector(self.updateDisplayLink))
+```
+
+selector中传入的updateDisplayLink的原型如下：
+
+```swift
+@objc func updateDisplayLink() {
+    ...
+}
+```
+
+接下来我们需要思考一个问题，我们需要在updateDisplayLink函数里面实现什么功能呢？因为地图是不停地移动的，附着在上面的轨迹自然也不是固定位置的，所以我们需要在updateDisplayLink函数中获取轨迹在CALayer上的位置，然后保存为UIBezierPath曲线，然后待CALayer回调Draw函数的时候将其绘制出来。
+
+我们先来考虑一下如何获取轨迹线。首先，我们知道可以通过MKMapView.overlays获取到它的overlay，然后再通过as操作符判断是不是我们添加了轨迹的MKPolyline：
+
+```swift
+for overlay in mapView!.overlays {
+    if let overlay = overlay as? MKPolyline {
+        ...
+    }
+}
+```
+
+接下来再通过UnsafeBufferPointer函数来获取地图上的坐标点，然后再通过MKMapView.convert函数将坐标点转化为CALayer相对于MKMapView上的UI坐标：
+
+```swift
+var points = [CGPoint]()
+for mapPoint in UnsafeBufferPointer(start: overlay.points(), count: overlay.pointCount){
+    let coordinate = mapPoint.coordinate
+    let point = mapView!.convert(coordinate, toPointTo: mapView!)
+    points.append(point)
+}
+```
+
+最后呢，就可以根据这些坐标点绘制贝塞尔曲线了：
+
+```swift
+let path = UIBezierPath()
+if let first = points.first {
+    path.move(to: first)
+}
+for point in points {
+    path.addLine(to: point)
+}
+for point in points.reversed() {
+    path.addLine(to: point)
+}
+path.close()
+```
+
+至此，CADisplayLink的使命就完成了。只不过，到这一步，只是将曲线的形状给勾勒出来了，我们还需要将这个形状给显示出来，这里就轮到CALayer上场了。
+
+CALayer的任务就简单多了，它只要实现一个draw函数，然后将存储好的贝塞尔曲线绘制出来即可：
+
+```swift
+override func draw(in ctx: CGContext) {
+    UIGraphicsPushContext(ctx)
+    ctx.setStrokeColor(UIColor.red.cgColor)
+    path?.lineWidth = 5
+    path?.stroke()
+    path?.fill()
+    UIGraphicsPopContext()
+}
+```
+
+我们将上述的代码汇集到一个类中，于是就有了我们一个名为FogLayer的类：
+
+```swift
+import MapKit
+import UIKit
+
+class FogLayer: CALayer {
+    var mapView: MKMapView?
+    var path: UIBezierPath?
+
+    lazy var displayLink: CADisplayLink = {
+        let link = CADisplayLink(target: self, selector: #selector(self.updateDisplayLink))
+        return link
+    }()
+
+
+    override func draw(in ctx: CGContext) {
+        UIGraphicsPushContext(ctx)
+        ctx.setStrokeColor(UIColor.red.cgColor)
+        path?.lineWidth = 5
+        path?.stroke()
+        path?.fill()
+        UIGraphicsPopContext()
+    }
+
+    @objc func updateDisplayLink() {
+        if mapView == nil {
+            // Do nothing
+            return
+        }
+
+        let path = UIBezierPath()
+        for overlay in mapView!.overlays {
+            if let overlay = overlay as? MKPolyline {
+                if let linePath = self.linePath(with: overlay) {
+                    path.append(linePath)
+                }
+            }
+        }
+
+        path.lineJoinStyle = .round
+        path.lineCapStyle = .round
+
+        self.path = path
+        setNeedsDisplay()
+    }
+
+ 
+
+    private func linePath(with overlay: MKPolyline) -> UIBezierPath? {
+        if mapView == nil {
+            return nil
+        }
+
+        let path = UIBezierPath()
+        var points = [CGPoint]()
+        for mapPoint in UnsafeBufferPointer(start: overlay.points(), count: overlay.pointCount) {
+            let coordinate = mapPoint.coordinate
+            let point = mapView!.convert(coordinate, toPointTo: mapView!)
+            points.append(point)
+        }
+
+        if let first = points.first {
+            path.move(to: first)
+        }
+        for point in points {
+            path.addLine(to: point)
+        }
+        for point in points.reversed() {
+            path.addLine(to: point)
+        }
+
+        path.close()
+
+        return path
+    }
+}
+```
+
+那么这个FogLayer的对象是在哪里保存呢？自然还是在MapViewState中：
+
+```swift
+class MapViewState: ObservableObject {
+    ...
+    var fogLayer = FogLayer()
+}
+```
+
+而降FogLayer和MKMapView关联起来，则还是在makeUIView里：
+
+```swift
+struct MapView: UIViewRepresentable {
+    ...
+
+    func makeUIView(context: Context) -> MKMapView {
+        ...
+        // 添加SubLayer
+        mapView.layer.addSublayer(mapViewState.fogLayer)
+        mapViewState.fogLayer.mapView = mapView
+        mapViewState.fogLayer.frame = UIScreen.main.bounds
+        mapViewState.fogLayer.displayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
+        mapViewState.fogLayer.setNeedsDisplay()
+
+        return mapView
+    }
+}
+```
+
+这里需要注释的是，CADisplay一定要加到RunLoop队列中，否则它是不会起到定时器的作用的。
+
+最后，运行代码，和使用MKPolylineRenderer的方式显示一致，如：
+
+<img src="README.assets/image-20200227171432532.png" alt="image-20200227171432532" style="zoom:50%;" />

@@ -20,7 +20,7 @@
 		96E6D50324066735005B1A57 /* MapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D50224066735005B1A57 /* MapViewDelegate.swift */; };
 		96E6D5142407426F005B1A57 /* PinAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D5132407426F005B1A57 /* PinAnnotation.swift */; };
 		96E6D516240760AD005B1A57 /* SecondContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D515240760AD005B1A57 /* SecondContentView.swift */; };
-		96E6D51824079949005B1A57 /* PolylineRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D51724079949005B1A57 /* PolylineRenderer.swift */; };
+		96E6D51A2407A4AC005B1A57 /* FogLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D5192407A4AC005B1A57 /* FogLayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,7 +60,7 @@
 		96E6D50224066735005B1A57 /* MapViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewDelegate.swift; sourceTree = "<group>"; };
 		96E6D5132407426F005B1A57 /* PinAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinAnnotation.swift; sourceTree = "<group>"; };
 		96E6D515240760AD005B1A57 /* SecondContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondContentView.swift; sourceTree = "<group>"; };
-		96E6D51724079949005B1A57 /* PolylineRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolylineRenderer.swift; sourceTree = "<group>"; };
+		96E6D5192407A4AC005B1A57 /* FogLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogLayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,7 +123,7 @@
 				96E6D50224066735005B1A57 /* MapViewDelegate.swift */,
 				96E6D5132407426F005B1A57 /* PinAnnotation.swift */,
 				96E6D515240760AD005B1A57 /* SecondContentView.swift */,
-				96E6D51724079949005B1A57 /* PolylineRenderer.swift */,
+				96E6D5192407A4AC005B1A57 /* FogLayer.swift */,
 			);
 			path = MapViewGuider;
 			sourceTree = "<group>";
@@ -287,8 +287,8 @@
 			files = (
 				96E6D50324066735005B1A57 /* MapViewDelegate.swift in Sources */,
 				96E6D4CF24064C2D005B1A57 /* AppDelegate.swift in Sources */,
+				96E6D51A2407A4AC005B1A57 /* FogLayer.swift in Sources */,
 				96E6D4FF24064C58005B1A57 /* MapView.swift in Sources */,
-				96E6D51824079949005B1A57 /* PolylineRenderer.swift in Sources */,
 				96E6D4D124064C2D005B1A57 /* SceneDelegate.swift in Sources */,
 				96E6D516240760AD005B1A57 /* SecondContentView.swift in Sources */,
 				96E6D50124065913005B1A57 /* MapViewState.swift in Sources */,

@@ -40,9 +40,4 @@ class MapViewDelegate: NSObject, MKMapViewDelegate {
         return annotationView
     }
 
-    // 创建renderer的时候会回调此函数
-    func mapView(_ mapView: MKMapView, rendererFor: MKOverlay) -> MKOverlayRenderer {
-        let renderer = PolylineRenderer(overlay: rendererFor)
-        return renderer
-    }
 }
