@@ -604,3 +604,41 @@ struct ContentView: View {
 > git clone https://github.com/no-rains/MapViewGuider.git
 >
 > git checkout annotation
+
+## 迷雾和轨迹
+
+如果大家使用过迷雾世界之类的软件，那么可以知道里面有一个非常有意思的场景，就是随着行走的轨迹，慢慢讲地图给清晰化。本章我们就来讨论这个事情，不过这里不会涉及到如何获取GPS数据以及保存，只是将笔墨着重于如何进行绘制而已。
+
+### 绘制轨迹
+
+对于轨迹的绘制，有两种比较常见的方法，一种是通过代理使用MKPolylineRenderer绘制，另外一种是直接在MapView上面再加一层overlay来进行。相对于来说，前一种比较简单，容易理解，后一种就比较复杂和麻烦了。不过在本章中，这两者都会有介绍，但后续的内容，却是基于后一种overlay的方式。
+
+但无论是哪种方式，最先要做的，都是在地图上添加轨迹。添加轨迹的方式很简单，就是根据坐标生成MKPolyline这个特殊的overlay，然后添加到MapView的视图中：
+
+```swift
+struct MapView: UIViewRepresentable {
+
+    func makeUIView(context: Context) -> MKMapView {
+        ...
+        //添加轨迹
+        let polyline = MKPolyline(coordinates: mapViewState.tracks, count: mapViewState.tracks.count)
+        mapView.addOverlay(polyline)
+        ...
+    }
+}
+```
+
+MapViewState中定义的tracks只是一个数据，如：
+
+```swift
+class MapViewState: ObservableObject {
+    ...
+    var tracks = [CLLocationCoordinate2D(latitude: 39.9, longitude: 116.38),
+                  CLLocationCoordinate2D(latitude: 39.9, longitude: 116.39)]
+}
+```
+
+轨迹添加完毕，那么接下来我们就来看如何将其绘制出来了。
+
+#### MKPolylineRenderer方式
+

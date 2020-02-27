@@ -15,13 +15,18 @@ struct MapView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView(frame: .zero)
+        //添加代理
         mapView.delegate = mapViewDelegate
+        //添加大头针
         mapView.addAnnotation(mapViewState.pinAnnotation!)
+        //添加轨迹
+        let polyline = MKPolyline(coordinates: mapViewState.tracks, count: mapViewState.tracks.count)
+        mapView.addOverlay(polyline)
         return mapView
     }
 
     func updateUIView(_ view: MKMapView, context: Context) {
-        // Set the map display region
+        // 设置中心点
         if let center = mapViewState.center {
             var region: MKCoordinateRegion
             if let span = mapViewState.span {
