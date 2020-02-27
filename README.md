@@ -1014,6 +1014,10 @@ class FogLayer: CALayer {
 }
 ```
 
+运行之后，放大地图，可以看见轨迹已经随着地图的放大而放大了：
+
+<img src="README.assets/image-20200227201301985.png" alt="image-20200227201301985" style="zoom:50%;" />
+
 > 如果需要本阶段的代码，请按如下进行操作：
 >
 > git clone https://github.com/no-rains/MapViewGuider.git
