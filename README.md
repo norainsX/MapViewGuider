@@ -733,7 +733,7 @@ for overlay in mapView!.overlays {
 }
 ```
 
-接下来再通过UnsafeBufferPointer函数来获取地图上的坐标点，然后再通过MKMapView.convert函数将坐标点转化为CALayer相对于MKMapView上的UI坐标：
+接下来再通过UnsafeBufferPointer函数来获取地图上的坐标点，然后再通过MKMapView.convert函数将GPS坐标点转化为CALayer相对于MKMapView上的UI坐标：
 
 ```swift
 var points = [CGPoint]()
@@ -919,3 +919,103 @@ class FogLayer: CALayer {
 效果如下所示：
 
 <img src="README.assets/image-20200227193256167.png" alt="image-20200227193256167" style="zoom:50%;" />
+
+### 动态改变轨迹宽度
+
+我们再来考虑一个问题，假设我们需要轨迹刚好覆盖长安大街的话，当地图放大缩小的时候，我们该如何动态设置轨迹的宽度呢？从前面的内容我们知道，可以通过MKMapView.convert函数来将地图上的GPS坐标点转换为View上的UI坐标，然后我们又知道长安大街的宽度大概在50米左右，那么我们是否可以选定两个GPS坐标点的距离刚好为50米左右，然后每次绘制的时候将这两个坐标点转换为UI坐标点，然后计算这两个UI坐标点的距离当成轨迹的宽度呢？实际上，这个是可行的。
+
+基于此，我们来选择如下两个测试坐标：
+
+```swift
+let mapPoint1 = CLLocationCoordinate2D(latitude: 22.629052, longitude: 114.136977)
+let mapPoint2 = CLLocationCoordinate2D(latitude: 22.629519, longitude: 114.137098)
+```
+
+我们如何可以确认这两个GPS坐标的距离差不多是50左右呢？其实可通过调用如下的这个函数确定：
+
+```swift
+func coordinateDistance(_ first: CLLocationCoordinate2D, _ second: CLLocationCoordinate2D) -> Int {
+        func radian(_ value: Double) -> Double {
+            return value * Double.pi / 180.0
+        }
+
+        let EARTH_RADIUS: Double = 6378137.0
+
+        let radLat1: Double = radian(first.latitude)
+        let radLat2: Double = radian(second.latitude)
+
+        let radLng1: Double = radian(first.longitude)
+        let radLng2: Double = radian(second.longitude)
+
+        let a: Double = radLat1 - radLat2
+        let b: Double = radLng1 - radLng2
+
+        var distance: Double = 2 * asin(sqrt(pow(sin(a / 2), 2) + cos(radLat1) * cos(radLat2) * pow(sin(b / 2), 2)))
+        distance = distance * EARTH_RADIUS
+        return Int(distance)
+    }
+```
+
+因为这个函数设计到经纬度的一些知识和算法，所以这里就不展开了，只需要知道传入两个GPS坐标，就可以计算出这两者之间的距离即可。
+
+回到正题，我们将两个GPS坐标转为UI的坐标：
+
+```swift
+let viewPoint1 = mapView.convert(mapPoint1, toPointTo: mapView)
+let viewPoint2 = mapView.convert(mapPoint2, toPointTo: mapView)
+```
+
+接着，我们用一个初中生都明白的计算两点之间的公式来算出两者的距离。由于距离有可能小于1，所以我们租后还要判断一下返回值是否小于1，如果是，就让它依然等于1，这样地图绘制的时候，就不至于什么都看不见了：
+
+```swift
+let distance = sqrt(pow(viewPoint1.x - viewPoint2.x, 2) + pow(viewPoint1.y - viewPoint2.y, 2))
+if distance < 1 {
+    return 1.0
+} else {
+    return CGFloat(distance)
+}
+```
+
+最后，我们只需要给轨迹赋值即可。将上述肢解的代码综合一下，如下所示：
+
+```swift
+class FogLayer: CALayer {
+    ...
+    override func draw(in ctx: CGContext) {
+        ...
+        if let lineWidth = lineWidth {
+            path?.lineWidth = lineWidth
+        } else {
+            path?.lineWidth = 5
+        }
+        ...
+    }
+    
+    var lineWidth: CGFloat? {
+        if let mapView = self.mapView {
+            // The distance between mapPoint1 and mapPoint2 in the map is about 53m
+            let mapPoint1 = CLLocationCoordinate2D(latitude: 22.629052, longitude: 114.136977)
+            let mapPoint2 = CLLocationCoordinate2D(latitude: 22.629519, longitude: 114.137098)
+
+            let viewPoint1 = mapView.convert(mapPoint1, toPointTo: mapView)
+            let viewPoint2 = mapView.convert(mapPoint2, toPointTo: mapView)
+
+            let distance = sqrt(pow(viewPoint1.x - viewPoint2.x, 2) + pow(viewPoint1.y - viewPoint2.y, 2))
+            if distance < 1 {
+                return 1.0
+            } else {
+                return CGFloat(distance)
+            }
+
+        } else {
+            return nil
+        }
+    }
+}
+```
+
+> 如果需要本阶段的代码，请按如下进行操作：
+>
+> git clone https://github.com/no-rains/MapViewGuider.git
+>
+> git checkout foglayer
