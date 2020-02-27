@@ -30,6 +30,11 @@ class MapViewDelegate: NSObject, MKMapViewDelegate {
         }
 
         annotationView?.annotation = annotation
+        
+        if let pinAnnotation = annotation as? PinAnnotation{
+            pinAnnotation.makeTextAccessoryView(annotationView: annotationView as! MKPinAnnotationView)
+        }
+        
         return annotationView
     }
 }

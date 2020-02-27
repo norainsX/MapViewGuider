@@ -448,3 +448,46 @@ func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnota
 运行之后，效果如下所示：
 
 <img src="README.assets/image-20200227085117720.png" alt="image-20200227085117720" style="zoom:50%;" />
+
+### 弹出附属框
+
+接下来我们做个有意思的事情，就是点击地图上的大头症，让它能够弹出显示附属框，该附属框有文字。要实现这玩意，需要在mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?函数中做一点事情，而这些事情，我们就干脆封装到PinAnnotation去好了。
+
+```swift
+class PinAnnotation: NSObject, MKAnnotation {
+    ...
+    func makeTextAccessoryView(annotationView: MKPinAnnotationView) {
+        var accessoryView: UIView
+
+        //创建文本的附属视图
+        let textView = UITextView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        textView.text = "Hello, PinAnnotation!"
+        textView.isEditable = false
+        accessoryView = textView
+
+        //设置文本对齐的约束条件
+        let widthConstraint = NSLayoutConstraint(item: accessoryView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
+        accessoryView.addConstraint(widthConstraint)
+        let heightConstraint = NSLayoutConstraint(item: accessoryView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
+        accessoryView.addConstraint(heightConstraint)
+        
+        //将创建好的附属视图赋值
+        annotationView.detailCalloutAccessoryView = accessoryView
+        
+        //让附属视图可以显示
+        annotationView.canShowCallout = true
+    }
+}
+
+```
+
+代码比较简单，看注释就明白大概的意思。总的来说，就是这么两条：
+
+- MKPinAnnotationView.canShowCallout变量用于控制点击的时候，是否显示附属框
+- MKPinAnnotationView.detailCalloutAccessoryView是用来显示的附属框内容
+
+代码运行之后，效果如下所示：
+
+<img src="README.assets/image-20200227093401592.png" alt="image-20200227093401592" style="zoom:50%;" />
+
+如果需要显示图片的话，也很简单，就是代码中声明UITextView的地方，更换为UIImage，然后赋值给MKPinAnnotationView.detailCalloutAccessoryView即可。原理是一样的，也没有什么可说的，这里就不再详述了。
