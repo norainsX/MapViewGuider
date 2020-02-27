@@ -363,3 +363,56 @@ struct MapView: UIViewRepresentable {
 > git clone https://github.com/no-rains/MapViewGuider.git
 >
 > git checkout base.use
+
+这里还有个小手尾，如果在移动到当前位置的时候，还需要显示地图自带的那个闪烁的小圆圈，只需要将mapView的showsUserLocation设置为true即可。
+
+## 大头针
+
+大头针在地图的应用，主要是让用户知道这里有一些客制化的信息，点击的时候可以进行获取，比如当前商家的信息啊、当前位置的图片等等。
+
+### 添加大头针
+
+添加大头针的方法比较简单，大体来说，有如下几个步骤：
+
+1. 创建一个实现了MKAnnotation协议的类，这里假设这个类的名称叫PinAnnotation
+2. 创建一个PinAnnotation的实例
+3. 通过MKMapView的addAnnotation函数将PinAnnotation的实例添加到地图上即可
+
+我们来逐步看一下，首先是实现MKAnnotation协议的类。在这个类中，我们主要是实现coordinate这个属性。这个coordinate属性是干啥用的呢？其实就是指明了大头针所放置的位置。鉴于此，我们不难得到一个非常简单的PinAnnotation：
+
+```swift
+import MapKit
+
+class PinAnnotation: NSObject, MKAnnotation {
+    var coordinate: CLLocationCoordinate2D
+
+    init(coordinate: CLLocationCoordinate2D) {
+        self.coordinate = coordinate
+    }
+}
+
+```
+
+回到我们的工程，这个PinAnnotation的实例放在哪里比较好呢？自然还是MapViewState里面了：
+
+```swift
+class MapViewState: ObservableObject {
+    ...
+    var pinAnnotation = PinAnnotation(coordinate: CLLocationCoordinate2D(latitude: 39.9, longitude: 116.38))
+}
+```
+
+然后，我们需要做得，就是在makeUIView函数中将这大头针给添加进去：
+
+```swift
+func makeUIView(context: Context) -> MKMapView {
+        ...
+        mapView.addAnnotation(mapViewState.pinAnnotation)
+        ...
+    }
+```
+
+运行起来之后，效果如下所示：
+
+<img src="README.assets/image-20200227083233688.png" style="zoom: 50%;" />
+

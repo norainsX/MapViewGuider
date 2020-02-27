@@ -10,5 +10,6 @@ import MapKit
 
 class MapViewState: ObservableObject {
     var span: MKCoordinateSpan?
-    @Published var center: CLLocationCoordinate2D?
+    @Published var center: CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 39.9, longitude: 116.38)
+    var pinAnnotation = PinAnnotation(coordinate: CLLocationCoordinate2D(latitude: 39.9, longitude: 116.38))
 }

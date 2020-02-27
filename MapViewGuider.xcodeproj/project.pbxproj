@@ -18,6 +18,7 @@
 		96E6D4FF24064C58005B1A57 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D4FE24064C58005B1A57 /* MapView.swift */; };
 		96E6D50124065913005B1A57 /* MapViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D50024065913005B1A57 /* MapViewState.swift */; };
 		96E6D50324066735005B1A57 /* MapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D50224066735005B1A57 /* MapViewDelegate.swift */; };
+		96E6D5142407426F005B1A57 /* PinAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D5132407426F005B1A57 /* PinAnnotation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		96E6D4FE24064C58005B1A57 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		96E6D50024065913005B1A57 /* MapViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewState.swift; sourceTree = "<group>"; };
 		96E6D50224066735005B1A57 /* MapViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewDelegate.swift; sourceTree = "<group>"; };
+		96E6D5132407426F005B1A57 /* PinAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinAnnotation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 				96E6D4FE24064C58005B1A57 /* MapView.swift */,
 				96E6D50024065913005B1A57 /* MapViewState.swift */,
 				96E6D50224066735005B1A57 /* MapViewDelegate.swift */,
+				96E6D5132407426F005B1A57 /* PinAnnotation.swift */,
 			);
 			path = MapViewGuider;
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 				96E6D4D124064C2D005B1A57 /* SceneDelegate.swift in Sources */,
 				96E6D50124065913005B1A57 /* MapViewState.swift in Sources */,
 				96E6D4D324064C2D005B1A57 /* ContentView.swift in Sources */,
+				96E6D5142407426F005B1A57 /* PinAnnotation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

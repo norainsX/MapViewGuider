@@ -16,6 +16,7 @@ struct MapView: UIViewRepresentable {
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView(frame: .zero)
         mapView.delegate = mapViewDelegate
+        mapView.addAnnotation(mapViewState.pinAnnotation)
         return mapView
     }
 
