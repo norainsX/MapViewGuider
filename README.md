@@ -416,3 +416,35 @@ func makeUIView(context: Context) -> MKMapView {
 
 <img src="README.assets/image-20200227083233688.png" style="zoom: 50%;" />
 
+### 使用和系统自带地图一致的大头针图像
+
+如果大家仔细观察的话，会发现前一节我们所使用的大头针的图案，和系统自带的地图所用的大头针不太一样。那么，如果需要使用和系统自带地图一致的大头针图像，该怎么弄呢？其步骤如下：
+
+1. MapViewDelegate类中实现一个mapView(**_** mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?函数
+2. 在该函数被调用的时候，创建一个标识符为"MKPinAnnotationView"的AnnotationView实例
+3. AnnotationView实例中，将我们创建的PinAnnotation赋值给它
+
+简单点来说，我们可以添加如下代码：
+
+```swift
+class MapViewDelegate: NSObject, MKMapViewDelegate {
+	...
+func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        // If the return value of MKAnnotationView is nil, it would be the default
+        var annotationView: MKAnnotationView?
+        
+        let identifier = "MKPinAnnotationView"
+        annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+        if annotationView == nil {
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        }
+
+        annotationView?.annotation = annotation
+        return annotationView
+    }
+}
+```
+
+运行之后，效果如下所示：
+
+<img src="README.assets/image-20200227085117720.png" alt="image-20200227085117720" style="zoom:50%;" />
