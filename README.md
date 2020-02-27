@@ -611,7 +611,7 @@ struct ContentView: View {
 
 ### 绘制轨迹
 
-对于轨迹的绘制，有两种比较常见的方法，一种是通过代理使用MKPolylineRenderer绘制，另外一种是直接在MapView上面再加一层overlay来进行。相对于来说，前一种比较简单，容易理解，后一种就比较复杂和麻烦了。不过在本章中，这两者都会有介绍，但后续的内容，却是基于后一种overlay的方式。
+对于轨迹的绘制，有两种比较常见的方法，一种是通过代理使用MKPolylineRenderer绘制，另外一种是直接在MapView上面再加一层SubOverlay来进行。相对于来说，前一种比较简单，容易理解，后一种就比较复杂和麻烦了。不过在本章中，这两者都会有介绍，但后续的内容，却是基于后一种SubOverlay的方式。
 
 但无论是哪种方式，最先要做的，都是在地图上添加轨迹。添加轨迹的方式很简单，就是根据坐标生成MKPolyline这个特殊的overlay，然后添加到MapView的视图中：
 
@@ -642,3 +642,52 @@ class MapViewState: ObservableObject {
 
 #### MKPolylineRenderer方式
 
+MKPolylineRenderer方式比较简单，步骤大概有如下几步：
+
+1. 创建一个派生于MKPolylineRenderer的子类，并且在该子类的draw函数中设置绘制的轨迹的颜色和大小
+2. 在MKMapViewDelegate的回调函数中将此子类的对象反馈给视图
+
+我们先来看一下创建MKPolylineRenderer的子类：
+
+```swift
+import Foundation
+import MapKit
+
+class PolylineRenderer: MKPolylineRenderer {
+    override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
+        // 线条的颜色
+        strokeColor = UIColor.red
+        // 线条的大小
+        lineWidth = 5
+        super.draw(mapRect, zoomScale: zoomScale, in: context)
+    }
+}
+
+```
+
+PolylineRenderer代码没啥好说的，就干了两件事，在回调函数中设置了线条的颜色和线条的大小。接下来，我们再来看看如何在MKMapViewDelegate的回调函数中将此子类的对象反馈给视图：
+
+```swift
+class MapViewDelegate: NSObject, MKMapViewDelegate {
+    ...
+    // 创建renderer的时候会回调此函数
+    func mapView(_ mapView: MKMapView, rendererFor: MKOverlay) -> MKOverlayRenderer {
+        let renderer = PolylineRenderer(overlay: rendererFor)
+        return renderer
+    }
+}
+```
+
+在回调函数中创建PolylineRenderer并返回，就是主要做的事情。
+
+运行代码，就可以看到效果了：
+
+<img src="README.assets/image-20200227143737923.png" alt="image-20200227143737923" style="zoom:50%;" />
+
+> 如果需要本阶段的代码，请按如下进行操作：
+>
+> git clone https://github.com/no-rains/MapViewGuider.git
+>
+> git checkout polyline.renderer
+
+不过MKPolylineRenderer方式虽然比较简单，但客制化一些功能的时候比较麻烦。如果仅仅只是显示轨迹的话，可能用MKPolylineRenderer就够了，但如果还需要做更多的工作，可能我们就需要接下来的SubOverlay的方式了。
