@@ -21,7 +21,10 @@ class FogLayer: CALayer {
 
     override func draw(in ctx: CGContext) {
         UIGraphicsPushContext(ctx)
-        ctx.setStrokeColor(UIColor.red.cgColor)
+        UIColor.darkGray.withAlphaComponent(0.75).setFill()
+        UIColor.clear.setStroke()
+        ctx.fill(UIScreen.main.bounds)
+        ctx.setBlendMode(.clear)
         path?.lineWidth = 5
         path?.stroke()
         path?.fill()

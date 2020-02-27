@@ -888,3 +888,34 @@ struct MapView: UIViewRepresentable {
 最后，运行代码，和使用MKPolylineRenderer的方式显示一致，如：
 
 <img src="README.assets/image-20200227171432532.png" alt="image-20200227171432532" style="zoom:50%;" />
+
+> 如果需要本阶段的代码，请按如下进行操作：
+>
+> git clone https://github.com/no-rains/MapViewGuider.git
+>
+> git checkout be0c0f28101df0c548a40f8bd53a5d8265657d36
+
+### 绘制迷雾
+
+对于用过类似世界迷雾的朋友来说，可能对里面的地图被迷雾覆盖，只有经过的轨迹才是清晰的这个功能比较好奇，究竟它是怎么实现的呢？原理非常简单，其实就显示在CALayer上画一层灰色，然后设置线条为透明，然后绘制即可。所以，我们这里可以修改一下CALayer的draw函数：
+
+```swift
+class FogLayer: CALayer {
+ 		...
+    override func draw(in ctx: CGContext) {
+        UIGraphicsPushContext(ctx)
+        UIColor.darkGray.withAlphaComponent(0.75).setFill()
+        UIColor.clear.setStroke()
+        ctx.fill(UIScreen.main.bounds)
+        ctx.setBlendMode(.clear)
+        path?.lineWidth = 5
+        path?.stroke()
+        path?.fill()
+        UIGraphicsPopContext()
+    }
+}
+```
+
+效果如下所示：
+
+<img src="README.assets/image-20200227193256167.png" alt="image-20200227193256167" style="zoom:50%;" />
