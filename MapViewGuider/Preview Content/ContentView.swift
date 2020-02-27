@@ -14,25 +14,33 @@ struct ContentView: View {
     var mapViewDelegate: MapViewDelegate?
 
     init() {
-        mapViewDelegate = MapViewDelegate(mapViewState: self.mapViewState)
+        mapViewDelegate = MapViewDelegate(mapViewState: mapViewState)
     }
 
     var body: some View {
-        ZStack {
-            MapView(mapViewState: mapViewState, mapViewDelegate: mapViewDelegate!)
-            
-             VStack {
-                 Spacer()
-                 Button(action: {
-                     self.mapViewState.center = CLLocationCoordinate2D(latitude: 39.9, longitude: 116.38)
-                 }
-                 ) {
-                     Text("MyLocation")
-                         .background(Color.gray)
-                         .padding()
-                 }
-             }
-             
+        NavigationView {
+            ZStack {
+                MapView(mapViewState: mapViewState, mapViewDelegate: mapViewDelegate!)
+                    .edgesIgnoringSafeArea(.all)
+
+                VStack {
+                    Spacer()
+                    Button(action: {
+                        self.mapViewState.center = CLLocationCoordinate2D(latitude: 39.9, longitude: 116.38)
+                    }
+                    ) {
+                        Text("MyLocation")
+                            .background(Color.gray)
+                            .padding()
+                    }
+
+                    if mapViewState.navigateView != nil {
+                        NavigationLink(destination: mapViewState.navigateView!, isActive: $mapViewState.activeNavigate) {
+                            EmptyView()
+                        }
+                    }
+                }
+            }
         }
     }
 }

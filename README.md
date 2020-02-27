@@ -491,3 +491,116 @@ class PinAnnotation: NSObject, MKAnnotation {
 <img src="README.assets/image-20200227093401592.png" alt="image-20200227093401592" style="zoom:50%;" />
 
 如果需要显示图片的话，也很简单，就是代码中声明UITextView的地方，更换为UIImage，然后赋值给MKPinAnnotationView.detailCalloutAccessoryView即可。原理是一样的，也没有什么可说的，这里就不再详述了。
+
+### 切换到另外的界面
+
+点击大头针，然后在附属框中点击感叹号，导航到另外一个页面。这个场景，应该是比较常用的。只不过，因为我们现在用的是SwiftUI，而MKMapView又属于UIKit，这两者在页面切换这块，其实是有点难以协同的。万事开头难，我们先一步一步来吧。
+
+首先，我们要做的是，在大头针的附属页面显示一个感叹号，点击它的时候，会执行一个函数。这部分代码比较简单，也就三句话，如下所示：
+
+```swift
+class PinAnnotation: NSObject, MKAnnotation {
+    ...
+    //点击感叹号的回调函数
+    @objc func onClickDetailButton(_ sender: Any, forEvent event: UIEvent) {
+        print("onClickDetailButton")
+    }
+
+    func makeTextAccessoryView(annotationView: MKPinAnnotationView) {
+        ...
+        // 感叹号按钮
+        let detailButton = UIButton(type: .detailDisclosure)
+        
+        // 点击感叹号，会调用传入的onClickDetailButton函数
+        detailButton.addTarget(self, action: #selector(PinAnnotation.onClickDetailButton(_:forEvent:)), for: UIControl.Event.touchUpInside)
+        
+        // 将感叹号按钮赋值到视图上
+        annotationView.rightCalloutAccessoryView = detailButton
+    }
+}
+```
+
+运行起来之后，界面如下所示：
+
+<img src="README.assets/image-20200227101306617.png" alt="image-20200227101306617" style="zoom:50%;" />
+
+接下来我们考量的难点就是，如何进行界面的切换呢？我们首先来了解SwiftUI的导航基本架构：
+
+```swift
+NavigationView {
+	NavigationLink(destination: XXX, isActive: $YYY) {
+     ...
+  }
+}
+```
+
+上述的只是一些伪代码，但我们需要知道如下知识点：
+
+- NavigationView是导航视图，整个APP可以只有一处地方使用，只要其它的View以及子View都在其作用范围
+- NavigationLink主要用于切换页面的，必须在NavigationView作用范围之内才有效
+- destination是要切换页面的实例
+- isActive是用来控制切换的，当其为true的时候会进行切换
+
+基于如上的知识点，我们来做如下几个代码修改：
+
+1. MapViewState增加一个navigateView变量，用来保存要导航的界面实例
+2. MapViewState增加一个activeNavigate变量，用来控制页面切换
+
+所以，我们MapViewState的代码如下：
+
+```swift
+class MapViewState: ObservableObject {
+    ...
+    var navigateView: SecondContentView?
+    @Published var activeNavigate = false
+    ...
+}
+```
+
+相应的，点击感叹号的时候，我们就必须要给这两个变量赋值了：
+
+```swift
+class PinAnnotation: NSObject, MKAnnotation {
+    ...
+
+    @objc func onClickDetailButton(_ sender: Any, forEvent event: UIEvent) {
+        mapViewState.navigateView = SecondContentView()
+        mapViewState.activeNavigate = true
+    }
+}
+```
+
+最后一步，就是将这两个变量插入到UI组件中：
+
+```swift
+struct ContentView: View {
+    @ObservedObject var mapViewState = MapViewState()
+    ...
+
+    var body: some View {
+        NavigationView {
+            ZStack {
+                MapView(mapViewState: mapViewState, mapViewDelegate: mapViewDelegate!)
+                    .edgesIgnoringSafeArea(.all)
+
+                ...
+
+                    if mapViewState.navigateView != nil {
+                        NavigationLink(destination: mapViewState.navigateView!, isActive: $mapViewState.activeNavigate) {
+                            EmptyView()
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+添加完毕之后，我们现在点击感叹号，就可以导航到另外的一个页面去了！
+
+> 如果需要本阶段的代码，请按如下进行操作：
+>
+> git clone https://github.com/no-rains/MapViewGuider.git
+>
+> git checkout annotation
