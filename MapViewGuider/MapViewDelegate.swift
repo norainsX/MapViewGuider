@@ -40,4 +40,14 @@ class MapViewDelegate: NSObject, MKMapViewDelegate {
         return annotationView
     }
 
+    // Restruct -------------------- str
+    func mapView(_ mapView: MKMapView, rendererFor: MKOverlay) -> MKOverlayRenderer {
+        if let mkPolylineRenderer = mapViewState.trackRendererManager?.trackRenderer.MKPolylineRenderer {
+            return mkPolylineRenderer
+        }
+        
+        return MKPolylineRenderer(overlay: rendererFor)
+    }
+
+    // Restruct -------------------- end
 }

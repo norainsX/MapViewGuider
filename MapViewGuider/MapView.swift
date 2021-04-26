@@ -19,15 +19,23 @@ struct MapView: UIViewRepresentable {
         mapView.delegate = mapViewDelegate
         // 添加大头针
         mapView.addAnnotation(mapViewState.pinAnnotation!)
-        // 添加轨迹
-        let polyline = MKPolyline(coordinates: mapViewState.tracks, count: mapViewState.tracks.count)
-        mapView.addOverlay(polyline)
-        // 添加SubLayer
-        mapView.layer.addSublayer(mapViewState.fogLayer)
-        mapViewState.fogLayer.mapView = mapView
-        mapViewState.fogLayer.frame = UIScreen.main.bounds
-        mapViewState.fogLayer.displayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
-        mapViewState.fogLayer.setNeedsDisplay()
+
+        // Restruct -------------------- str
+        mapViewState.initTrackRendererManager(mkMapView: mapView)
+        mapViewState.trackRendererManager?.trackRenderer.addStaticTrackTrack(coordinates: mapViewState.tracks)
+        // Restruct -------------------- end
+
+        /*
+         // 添加轨迹
+         let polyline = MKPolyline(coordinates: mapViewState.tracks, count: mapViewState.tracks.count)
+         mapView.addOverlay(polyline)
+         // 添加SubLayer
+         mapView.layer.addSublayer(mapViewState.fogLayer)
+         mapViewState.fogLayer.mapView = mapView
+         mapViewState.fogLayer.frame = UIScreen.main.bounds
+         mapViewState.fogLayer.displayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
+         mapViewState.fogLayer.setNeedsDisplay()
+          */
 
         return mapView
     }

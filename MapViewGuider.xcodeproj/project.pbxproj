@@ -21,6 +21,10 @@
 		96E6D5142407426F005B1A57 /* PinAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D5132407426F005B1A57 /* PinAnnotation.swift */; };
 		96E6D516240760AD005B1A57 /* SecondContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D515240760AD005B1A57 /* SecondContentView.swift */; };
 		96E6D51A2407A4AC005B1A57 /* FogLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D5192407A4AC005B1A57 /* FogLayer.swift */; };
+		96F7F2FF263702F400BA4DF8 /* TrackRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7F2FB263702F300BA4DF8 /* TrackRenderer.swift */; };
+		96F7F300263702F400BA4DF8 /* TrackRendererManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7F2FC263702F300BA4DF8 /* TrackRendererManager.swift */; };
+		96F7F301263702F400BA4DF8 /* LayerRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7F2FD263702F300BA4DF8 /* LayerRenderer.swift */; };
+		96F7F302263702F400BA4DF8 /* PolylineRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7F2FE263702F400BA4DF8 /* PolylineRenderer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +65,10 @@
 		96E6D5132407426F005B1A57 /* PinAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinAnnotation.swift; sourceTree = "<group>"; };
 		96E6D515240760AD005B1A57 /* SecondContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondContentView.swift; sourceTree = "<group>"; };
 		96E6D5192407A4AC005B1A57 /* FogLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FogLayer.swift; sourceTree = "<group>"; };
+		96F7F2FB263702F300BA4DF8 /* TrackRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackRenderer.swift; sourceTree = "<group>"; };
+		96F7F2FC263702F300BA4DF8 /* TrackRendererManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackRendererManager.swift; sourceTree = "<group>"; };
+		96F7F2FD263702F300BA4DF8 /* LayerRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayerRenderer.swift; sourceTree = "<group>"; };
+		96F7F2FE263702F400BA4DF8 /* PolylineRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolylineRenderer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +119,7 @@
 		96E6D4CD24064C2D005B1A57 /* MapViewGuider */ = {
 			isa = PBXGroup;
 			children = (
+				96F7F2E32635B87300BA4DF8 /* TrackRenderer */,
 				96E6D4CE24064C2D005B1A57 /* AppDelegate.swift */,
 				96E6D4D024064C2D005B1A57 /* SceneDelegate.swift */,
 				96E6D4D424064C30005B1A57 /* Assets.xcassets */,
@@ -152,6 +161,17 @@
 				96E6D4F224064C30005B1A57 /* Info.plist */,
 			);
 			path = MapViewGuiderUITests;
+			sourceTree = "<group>";
+		};
+		96F7F2E32635B87300BA4DF8 /* TrackRenderer */ = {
+			isa = PBXGroup;
+			children = (
+				96F7F2FD263702F300BA4DF8 /* LayerRenderer.swift */,
+				96F7F2FE263702F400BA4DF8 /* PolylineRenderer.swift */,
+				96F7F2FB263702F300BA4DF8 /* TrackRenderer.swift */,
+				96F7F2FC263702F300BA4DF8 /* TrackRendererManager.swift */,
+			);
+			path = TrackRenderer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -285,6 +305,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96F7F300263702F400BA4DF8 /* TrackRendererManager.swift in Sources */,
+				96F7F2FF263702F400BA4DF8 /* TrackRenderer.swift in Sources */,
 				96E6D50324066735005B1A57 /* MapViewDelegate.swift in Sources */,
 				96E6D4CF24064C2D005B1A57 /* AppDelegate.swift in Sources */,
 				96E6D51A2407A4AC005B1A57 /* FogLayer.swift in Sources */,
@@ -293,6 +315,8 @@
 				96E6D516240760AD005B1A57 /* SecondContentView.swift in Sources */,
 				96E6D50124065913005B1A57 /* MapViewState.swift in Sources */,
 				96E6D4D324064C2D005B1A57 /* ContentView.swift in Sources */,
+				96F7F302263702F400BA4DF8 /* PolylineRenderer.swift in Sources */,
+				96F7F301263702F400BA4DF8 /* LayerRenderer.swift in Sources */,
 				96E6D5142407426F005B1A57 /* PinAnnotation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

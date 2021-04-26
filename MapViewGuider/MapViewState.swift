@@ -18,6 +18,12 @@ class MapViewState: ObservableObject {
     @Published var activeNavigate = false
     var fogLayer = FogLayer()
 
+    private(set) var trackRendererManager: TrackRendererManager?
+
+    func initTrackRendererManager(mkMapView: MKMapView, rendererType: TrackRendererManager.RendererType = .polyline) {
+        trackRendererManager = TrackRendererManager(mkMapView: mkMapView, rendererType: rendererType)
+    }
+
     init() {
         pinAnnotation = PinAnnotation(coordinate: CLLocationCoordinate2D(latitude: 39.9, longitude: 116.38), mapViewState: self)
     }
