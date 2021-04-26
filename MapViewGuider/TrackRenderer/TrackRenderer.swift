@@ -44,7 +44,7 @@ protocol TrackRenderer {
 
 extension TrackRenderer {
     func createPolylineRenderer(overlay: MKOverlay) -> MKPolylineRenderer {
-        return MKPolylineRenderer(overlay: overlay)
+        return MKPolylineRenderer()
     }
 
     var CALayer: CALayer? {
