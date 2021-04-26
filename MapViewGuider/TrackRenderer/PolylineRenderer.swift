@@ -18,8 +18,8 @@ class PolylineRenderer: TrackRenderer {
         self.mkMapView = mkMapView
     }
 
-    var MKPolylineRenderer: MKPolylineRenderer? {
-        return mkPolylineRenderer
+    func createPolylineRenderer(overlay: MKOverlay) -> MKPolylineRenderer {
+        return _MKPolylineRenderer(overlay: overlay)
     }
 
     func switchRendererMode(rendererMode: RendererMode) -> Bool {

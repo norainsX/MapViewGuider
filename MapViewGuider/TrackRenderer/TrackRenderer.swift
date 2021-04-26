@@ -9,57 +9,53 @@
 import MapKit
 
 enum RendererMode: Int, CaseIterable, Codable {
-        case clear
-        case fog
+    case clear
+    case fog
 
-        var localizedDescription: String {
-            switch self {
-            case .clear:
-                return NSLocalizedString("Clear", comment: "")
-            case .fog:
-                return NSLocalizedString("Fog", comment: "")
-            }
+    var localizedDescription: String {
+        switch self {
+        case .clear:
+            return NSLocalizedString("Clear", comment: "")
+        case .fog:
+            return NSLocalizedString("Fog", comment: "")
         }
+    }
 }
 
 protocol TrackRenderer {
     @discardableResult func switchRendererMode(rendererMode: RendererMode) -> Bool
 
     @discardableResult func open() -> Bool
-    func close() 
+    func close()
 
-    var MKPolylineRenderer: MKPolylineRenderer? {
-        get 
-    }
+    func createPolylineRenderer(overlay: MKOverlay) -> MKPolylineRenderer
 
     var CALayer: CALayer? {
         get
     }
 
-    func updateDynamicTrack(coordinates: [CLLocationCoordinate2D]) 
+    func updateDynamicTrack(coordinates: [CLLocationCoordinate2D])
 
     typealias StaticTrackID = Int
-    func addStaticTrackTrack(coordinates: [CLLocationCoordinate2D]) -> StaticTrackID 
-    func removeStaticTrack(staticTrackID: StaticTrackID) 
-    func removeAllStaticTrack() 
-    
+    @discardableResult func addStaticTrackTrack(coordinates: [CLLocationCoordinate2D]) -> StaticTrackID
+    func removeStaticTrack(staticTrackID: StaticTrackID)
+    func removeAllStaticTrack()
 }
 
 extension TrackRenderer {
-    var MKPolylineRenderer: MKPolylineRenderer? {
-        return nil 
+    func createPolylineRenderer(overlay: MKOverlay) -> MKPolylineRenderer {
+        return MKPolylineRenderer(overlay: overlay)
     }
 
     var CALayer: CALayer? {
-        return nil 
+        return nil
     }
 
-    func open() -> Bool{
+    func open() -> Bool {
         return true
     }
 
     func close() {
         // Do nothing
     }
-    
 }
