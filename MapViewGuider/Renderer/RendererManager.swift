@@ -1,5 +1,5 @@
 //
-//  TrackRendererManager.swift
+//  RendererManager.swift
 //  WorldRoad
 //
 //  Created by norains on 2021/04/25.
@@ -8,7 +8,7 @@
 
 import MapKit
 
-class TrackRendererManager {
+class RendererManager {
     private var mkMapView: MKMapView
     private(set) var trackRenderer: TrackRenderer
     private var rendererType: RendererType
@@ -16,7 +16,7 @@ class TrackRendererManager {
     init(mkMapView: MKMapView, rendererType: RendererType) {
         self.mkMapView = mkMapView
         self.rendererType = rendererType
-        trackRenderer = TrackRendererManager.createNewTrackRender(mkMapView: mkMapView, rendererType: rendererType)
+        trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, rendererType: rendererType)
     }
 
     enum RendererType: Int {
@@ -33,7 +33,7 @@ class TrackRendererManager {
         // Release the resource
         trackRenderer.close()
 
-        trackRenderer = TrackRendererManager.createNewTrackRender(mkMapView: mkMapView, rendererType: rendererType)
+        trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, rendererType: rendererType)
         trackRenderer.open()
     }
 

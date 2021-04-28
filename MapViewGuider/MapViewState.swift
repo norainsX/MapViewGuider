@@ -19,10 +19,10 @@ class MapViewState: ObservableObject {
     var fogLayer = FogLayer()
 
     // Restruct -------------------- str
-    private(set) var trackRendererManager: TrackRendererManager?
+    private(set) var rendererManager: RendererManager?
 
-    func initTrackRendererManager(mkMapView: MKMapView, rendererType: TrackRendererManager.RendererType = .polyline) {
-        trackRendererManager = TrackRendererManager(mkMapView: mkMapView, rendererType: rendererType)
+    func initRendererManager(mkMapView: MKMapView, rendererType: RendererManager.RendererType = .polyline) {
+        rendererManager = RendererManager(mkMapView: mkMapView, rendererType: rendererType)
     }
     // Restruct -------------------- end
 

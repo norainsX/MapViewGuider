@@ -42,7 +42,7 @@ class MapViewDelegate: NSObject, MKMapViewDelegate {
 
     // Restruct -------------------- str
     func mapView(_ mapView: MKMapView, rendererFor: MKOverlay) -> MKOverlayRenderer {
-        if let trackRenderer = mapViewState.trackRendererManager?.trackRenderer {
+        if let trackRenderer = mapViewState.rendererManager?.trackRenderer {
             return trackRenderer.createPolylineRenderer(overlay: rendererFor)
         }
         

@@ -21,8 +21,8 @@ struct MapView: UIViewRepresentable {
         mapView.addAnnotation(mapViewState.pinAnnotation!)
 
         // Restruct -------------------- str
-        mapViewState.initTrackRendererManager(mkMapView: mapView)
-        mapViewState.trackRendererManager?.trackRenderer.addStaticTrackTrack(coordinates: mapViewState.tracks)
+        mapViewState.initRendererManager(mkMapView: mapView)
+        mapViewState.rendererManager?.trackRenderer.addStaticTrackTrack(coordinates: mapViewState.tracks)
         // Restruct -------------------- end
 
         /*
