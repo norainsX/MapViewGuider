@@ -25,6 +25,9 @@
 		96F7F300263702F400BA4DF8 /* RendererManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7F2FC263702F300BA4DF8 /* RendererManager.swift */; };
 		96F7F301263702F400BA4DF8 /* LayerRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7F2FD263702F300BA4DF8 /* LayerRenderer.swift */; };
 		96F7F302263702F400BA4DF8 /* PolylineRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7F2FE263702F400BA4DF8 /* PolylineRenderer.swift */; };
+		96F7F3132639AF1D00BA4DF8 /* AnnotationRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7F3122639AF1D00BA4DF8 /* AnnotationRenderer.swift */; };
+		96F7F3182639B0A200BA4DF8 /* BezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7F3172639B0A200BA4DF8 /* BezierPath.swift */; };
+		96F7F31D2639B0C200BA4DF8 /* Debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F7F31C2639B0C200BA4DF8 /* Debouncer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +72,9 @@
 		96F7F2FC263702F300BA4DF8 /* RendererManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererManager.swift; sourceTree = "<group>"; };
 		96F7F2FD263702F300BA4DF8 /* LayerRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayerRenderer.swift; sourceTree = "<group>"; };
 		96F7F2FE263702F400BA4DF8 /* PolylineRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolylineRenderer.swift; sourceTree = "<group>"; };
+		96F7F3122639AF1D00BA4DF8 /* AnnotationRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationRenderer.swift; sourceTree = "<group>"; };
+		96F7F3172639B0A200BA4DF8 /* BezierPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BezierPath.swift; sourceTree = "<group>"; };
+		96F7F31C2639B0C200BA4DF8 /* Debouncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debouncer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +125,8 @@
 		96E6D4CD24064C2D005B1A57 /* MapViewGuider */ = {
 			isa = PBXGroup;
 			children = (
+				96F7F31C2639B0C200BA4DF8 /* Debouncer.swift */,
+				96F7F3172639B0A200BA4DF8 /* BezierPath.swift */,
 				96F7F2E32635B87300BA4DF8 /* Renderer */,
 				96E6D4CE24064C2D005B1A57 /* AppDelegate.swift */,
 				96E6D4D024064C2D005B1A57 /* SceneDelegate.swift */,
@@ -170,6 +178,7 @@
 				96F7F2FE263702F400BA4DF8 /* PolylineRenderer.swift */,
 				96F7F2FB263702F300BA4DF8 /* TrackRenderer.swift */,
 				96F7F2FC263702F300BA4DF8 /* RendererManager.swift */,
+				96F7F3122639AF1D00BA4DF8 /* AnnotationRenderer.swift */,
 			);
 			path = Renderer;
 			sourceTree = "<group>";
@@ -306,8 +315,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				96F7F300263702F400BA4DF8 /* RendererManager.swift in Sources */,
+				96F7F31D2639B0C200BA4DF8 /* Debouncer.swift in Sources */,
+				96F7F3182639B0A200BA4DF8 /* BezierPath.swift in Sources */,
 				96F7F2FF263702F400BA4DF8 /* TrackRenderer.swift in Sources */,
 				96E6D50324066735005B1A57 /* MapViewDelegate.swift in Sources */,
+				96F7F3132639AF1D00BA4DF8 /* AnnotationRenderer.swift in Sources */,
 				96E6D4CF24064C2D005B1A57 /* AppDelegate.swift in Sources */,
 				96E6D51A2407A4AC005B1A57 /* FogLayer.swift in Sources */,
 				96E6D4FF24064C58005B1A57 /* MapView.swift in Sources */,
