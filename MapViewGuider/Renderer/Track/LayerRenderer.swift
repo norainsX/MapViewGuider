@@ -8,16 +8,15 @@
 
 import MapKit
 
-class LayerRenderer: TrackRenderer {
+class LayerRenderer: TrackUtility, TrackRenderer {
     private var rendererMode = RendererMode.clear
-    private var mkMapView: MKMapView
     private var trackLayer = TrackLayer()
-    
 
-    init(mkMapView: MKMapView) {
-        self.mkMapView = mkMapView
+    override init(mkMapView: MKMapView) {
+        super.init(mkMapView: mkMapView)
+        trackLayer.layerRenderer = self
     }
-    
+
     var CALayer: CALayer? {
         return trackLayer
     }
@@ -41,8 +40,10 @@ class LayerRenderer: TrackRenderer {
     }
 }
 
-fileprivate class TrackLayer: CALayer {
+class TrackLayer: CALayer {
     var mode = RendererMode.fog
+
+    var layerRenderer: LayerRenderer?
 
     var tracks: [[CLLocationCoordinate2D]]? {
         nil
@@ -75,7 +76,7 @@ fileprivate class TrackLayer: CALayer {
                 ctx.setStrokeColor(trackColor.withAlphaComponent(0.5).cgColor)
             }
 
-            if let lineWidth = lineWidth {
+            if let lineWidth = layerRenderer?.lineWidth {
                 trackBezierPath?.lineWidth = lineWidth
             }
             trackBezierPath?.stroke()
@@ -123,37 +124,6 @@ fileprivate class TrackLayer: CALayer {
         if let mapView = self.mapView {
             let point = mapView.convert(coordinate, toPointTo: mapView)
             return BezierPath.generateCircle(arcCenter: point, radius: radius)
-        } else {
-            return nil
-        }
-    }
-
-    var lineWidth: CGFloat? {
-        if let mapView = self.mapView {
-            // The distance between mapPoint1 and mapPoint2 in the map is about 53m
-            // let mapPoint1 = CLLocationCoordinate2D(latitude: 22.629052, longitude: 114.136977)
-            // let mapPoint2 = CLLocationCoordinate2D(latitude: 22.629519, longitude: 114.137098)
-
-            // The distance between mapPoint1 and mapPoint2 in the map is about 25m
-            // let mapPoint1 = CLLocationCoordinate2D(latitude: 22.629052, longitude: 114.136977)
-            // let mapPoint2 = CLLocationCoordinate2D(latitude: 22.629250, longitude: 114.137098)
-
-            // The distance between mapPoint1 and mapPoint2 in the map is about 28m
-            let mapPoint1 = CLLocationCoordinate2D(latitude: 22.629052, longitude: 114.136977)
-            let mapPoint2 = CLLocationCoordinate2D(latitude: 22.629180, longitude: 114.137098)
-
-            // print(LocationUtils.coordinateDistance(mapPoint1, mapPoint2))
-
-            let viewPoint1 = mapView.convert(mapPoint1, toPointTo: mapView)
-            let viewPoint2 = mapView.convert(mapPoint2, toPointTo: mapView)
-
-            let distance = sqrt(pow(viewPoint1.x - viewPoint2.x, 2) + pow(viewPoint1.y - viewPoint2.y, 2))
-            if distance < 1 {
-                return 1.0
-            } else {
-                return CGFloat(distance)
-            }
-
         } else {
             return nil
         }
