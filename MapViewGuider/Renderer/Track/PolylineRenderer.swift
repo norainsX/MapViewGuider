@@ -7,16 +7,11 @@
 //
 import MapKit
 
-class PolylineRenderer: TrackRenderer {
+class PolylineRenderer: TrackUtility, TrackRenderer {
     private var dynamicTrackPolyline: MKPolyline?
     private var mkPolylineRenderer = _MKPolylineRenderer()
     private var staticPolylines = [StaticTrackID: MKPolyline]()
     private var rendererMode = RendererMode.clear
-    private var mkMapView: MKMapView
-
-    init(mkMapView: MKMapView) {
-        self.mkMapView = mkMapView
-    }
 
     func createPolylineRenderer(overlay: MKOverlay) -> MKPolylineRenderer {
         return _MKPolylineRenderer(overlay: overlay)

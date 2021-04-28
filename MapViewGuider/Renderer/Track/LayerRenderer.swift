@@ -11,7 +11,7 @@ import MapKit
 class LayerRenderer: TrackRenderer {
     private var rendererMode = RendererMode.clear
     private var mkMapView: MKMapView
-    private var _caLayer = _CALayer()
+    private var trackLayer = TrackLayer()
     
 
     init(mkMapView: MKMapView) {
@@ -19,7 +19,7 @@ class LayerRenderer: TrackRenderer {
     }
     
     var CALayer: CALayer? {
-        return _caLayer
+        return trackLayer
     }
 
     func switchRendererMode(rendererMode: RendererMode) -> Bool {
@@ -41,7 +41,7 @@ class LayerRenderer: TrackRenderer {
     }
 }
 
-fileprivate class _CALayer: CALayer {
+fileprivate class TrackLayer: CALayer {
     var mode = RendererMode.fog
 
     var tracks: [[CLLocationCoordinate2D]]? {
