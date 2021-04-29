@@ -44,4 +44,24 @@ class TrackUtility {
             return nil
         }
     }
+
+    private var _fogColor: UIColor = UIColor.darkGray
+    var fogColor: UIColor {
+        get {
+            return _fogColor.withAlphaComponent(0.5)
+        }
+        set {
+            _fogColor = newValue
+        }
+    }
+
+    private var _trackColor: UIColor = UIColor.red
+    var trackColor: UIColor {
+        get {
+            return _trackColor.withAlphaComponent(0.5)
+        }
+        set {
+            _trackColor = newValue
+        }
+    }
 }

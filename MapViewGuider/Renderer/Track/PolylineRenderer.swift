@@ -88,7 +88,7 @@ fileprivate class TrackPolylineRenderer: MKPolylineRenderer {
 
     override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
         // 线条的颜色
-        strokeColor = UIColor.red
+        strokeColor = trackUtility?.trackColor
         // 线条的大小
         lineWidth = trackUtility!.lineWidth!
 

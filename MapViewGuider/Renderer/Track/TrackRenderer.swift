@@ -33,6 +33,16 @@ protocol TrackRenderer {
     var CALayer: CALayer? {
         get
     }
+    
+    var fogColor: UIColor {
+        get
+        set
+    }
+
+    var trackColor: UIColor {
+        get
+        set
+    }
 
     func updateDynamicTrack(coordinates: [CLLocationCoordinate2D])
 
