@@ -24,11 +24,9 @@ class LayerRenderer: TrackUtility, TrackRenderer {
         trackLayer!.frame = UIScreen.main.bounds
         trackLayer!.displayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
         trackLayer!.setNeedsDisplay()
-        return true
-    }
 
-    var CALayer: CALayer? {
-        return trackLayer
+        mkMapView!.layer.addSublayer(trackLayer!)
+        return true
     }
 
     func switchRendererMode(rendererMode: RendererMode) -> Bool {

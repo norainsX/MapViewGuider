@@ -30,10 +30,6 @@ protocol TrackRenderer {
 
     func createPolylineRenderer(overlay: MKOverlay) -> MKPolylineRenderer
 
-    var CALayer: CALayer? {
-        get
-    }
-    
     var fogColor: UIColor {
         get
         set

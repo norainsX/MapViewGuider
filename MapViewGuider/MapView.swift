@@ -27,10 +27,6 @@ struct MapView: UIViewRepresentable {
 
         // mapViewState.rendererManager?.trackRenderer.switchRendererMode(rendererMode: .clear)
 
-        if let layer = mapViewState.rendererManager?.trackRenderer.CALayer {
-            mapView.layer.addSublayer(layer)
-        }
-
         // The temp coordinates for testing only
         mapViewState.rendererManager?.trackRenderer.addStaticTrack(coordinates: mapViewState.tracks)
         // Restruct -------------------- end
