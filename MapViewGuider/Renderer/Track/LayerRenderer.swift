@@ -10,11 +10,13 @@ import MapKit
 
 class LayerRenderer: TrackUtility, TrackRenderer {
     private var rendererMode = RendererMode.clear
-    private var trackLayer = TrackLayer()
+    private var trackLayer: TrackLayer?
 
     override init(mkMapView: MKMapView) {
         super.init(mkMapView: mkMapView)
-        trackLayer.layerRenderer = self
+
+        trackLayer = TrackLayer()
+        trackLayer!.trackUtility = self
     }
 
     var CALayer: CALayer? {
@@ -23,6 +25,7 @@ class LayerRenderer: TrackUtility, TrackRenderer {
 
     func switchRendererMode(rendererMode: RendererMode) -> Bool {
         self.rendererMode = rendererMode
+        trackLayer!.rendererMode = rendererMode
         return true
     }
 
@@ -40,10 +43,10 @@ class LayerRenderer: TrackUtility, TrackRenderer {
     }
 }
 
-class TrackLayer: CALayer {
-    var mode = RendererMode.fog
+fileprivate class TrackLayer: CALayer {
+    var rendererMode = RendererMode.fog
 
-    var layerRenderer: LayerRenderer?
+    var trackUtility: TrackUtility?
 
     var tracks: [[CLLocationCoordinate2D]]? {
         nil
@@ -67,16 +70,16 @@ class TrackLayer: CALayer {
         if let mapView = self.mapView {
             UIGraphicsPushContext(ctx)
 
-            if mode == .fog {
+            if rendererMode == .fog {
                 fogColor.withAlphaComponent(0.75).setFill()
                 UIColor.clear.setStroke()
                 ctx.fill(mapView.frame)
                 ctx.setBlendMode(.clear)
-            } else if mode == .clear {
+            } else if rendererMode == .clear {
                 ctx.setStrokeColor(trackColor.withAlphaComponent(0.5).cgColor)
             }
 
-            if let lineWidth = layerRenderer?.lineWidth {
+            if let lineWidth = trackUtility?.lineWidth {
                 trackBezierPath?.lineWidth = lineWidth
             }
             trackBezierPath?.stroke()

@@ -9,12 +9,19 @@ import MapKit
 
 class PolylineRenderer: TrackUtility, TrackRenderer {
     private var dynamicTrackPolyline: MKPolyline?
-    private var mkPolylineRenderer = _MKPolylineRenderer()
+    private var trackPolylineRenderer: TrackPolylineRenderer?
     private var staticPolylines = [StaticTrackID: MKPolyline]()
     private var rendererMode = RendererMode.clear
 
+    override init(mkMapView: MKMapView) {
+        super.init(mkMapView: mkMapView)
+
+        trackPolylineRenderer = TrackPolylineRenderer()
+        trackPolylineRenderer!.trackUtility = self
+    }
+
     func createPolylineRenderer(overlay: MKOverlay) -> MKPolylineRenderer {
-        return _MKPolylineRenderer(overlay: overlay)
+        return TrackPolylineRenderer(overlay: overlay)
     }
 
     func switchRendererMode(rendererMode: RendererMode) -> Bool {
@@ -31,11 +38,11 @@ class PolylineRenderer: TrackUtility, TrackRenderer {
     func updateDynamicTrack(coordinates: [CLLocationCoordinate2D]) {
         // Add the new polyline
         let newPolyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
-        mkMapView.addOverlay(newPolyline)
+        mkMapView!.addOverlay(newPolyline)
 
         // Remove the old polyline if need
         if let dynamicTrackPolyline = self.dynamicTrackPolyline {
-            mkMapView.removeOverlay(dynamicTrackPolyline)
+            mkMapView!.removeOverlay(dynamicTrackPolyline)
         }
 
         dynamicTrackPolyline = newPolyline
@@ -58,7 +65,7 @@ class PolylineRenderer: TrackUtility, TrackRenderer {
 
     func addStaticTrackTrack(coordinates: [CLLocationCoordinate2D]) -> StaticTrackID {
         let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
-        mkMapView.addOverlay(polyline)
+        mkMapView!.addOverlay(polyline)
 
         let newStaticTrackID = self.newStaticTrackID
         staticPolylines[newStaticTrackID] = polyline
@@ -68,26 +75,29 @@ class PolylineRenderer: TrackUtility, TrackRenderer {
 
     func removeStaticTrack(staticTrackID: StaticTrackID) {
         if let polyline = staticPolylines[staticTrackID] {
-            mkMapView.removeOverlay(polyline)
+            mkMapView!.removeOverlay(polyline)
             staticPolylines[staticTrackID] = nil
         }
     }
 
     func removeAllStaticTrack() {
         for (_, polyline) in staticPolylines {
-            mkMapView.removeOverlay(polyline)
+            mkMapView!.removeOverlay(polyline)
         }
 
         staticPolylines.removeAll()
     }
 }
 
-fileprivate class _MKPolylineRenderer: MKPolylineRenderer {
+fileprivate class TrackPolylineRenderer: MKPolylineRenderer {
+    var trackUtility: TrackUtility?
+
     override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
         // 线条的颜色
         strokeColor = UIColor.red
         // 线条的大小
-        lineWidth = 5
+        lineWidth = trackUtility!.lineWidth!
+
         super.draw(mapRect, zoomScale: zoomScale, in: context)
     }
 }
