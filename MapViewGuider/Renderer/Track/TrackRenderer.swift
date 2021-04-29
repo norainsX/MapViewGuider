@@ -47,7 +47,7 @@ protocol TrackRenderer {
     func updateDynamicTrack(coordinates: [CLLocationCoordinate2D])
 
     typealias StaticTrackID = Int
-    @discardableResult func addStaticTrackTrack(coordinates: [CLLocationCoordinate2D]) -> StaticTrackID
+    @discardableResult func addStaticTrack(coordinates: [CLLocationCoordinate2D]) -> StaticTrackID
     func removeStaticTrack(staticTrackID: StaticTrackID)
     func removeAllStaticTrack()
 }

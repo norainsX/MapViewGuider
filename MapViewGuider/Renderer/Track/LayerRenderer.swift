@@ -30,16 +30,36 @@ class LayerRenderer: TrackUtility, TrackRenderer {
     }
 
     func updateDynamicTrack(coordinates: [CLLocationCoordinate2D]) {
+        trackLayer!.dynamicTracks = coordinates
     }
 
-    func addStaticTrackTrack(coordinates: [CLLocationCoordinate2D]) -> StaticTrackID {
-        return 0
+    func addStaticTrack(coordinates: [CLLocationCoordinate2D]) -> StaticTrackID {
+        let newID = newStaticTrackID
+        trackLayer!.staticTracks[newID] = coordinates
+        return newID
     }
 
     func removeStaticTrack(staticTrackID: StaticTrackID) {
+        trackLayer!.staticTracks[staticTrackID] = nil
     }
 
     func removeAllStaticTrack() {
+        trackLayer!.staticTracks.removeAll()
+    }
+
+    private var newStaticTrackID: StaticTrackID {
+        if trackLayer!.staticTracks.count == 0 {
+            return 0
+        } else {
+            var id: StaticTrackID = 0
+            while true {
+                if trackLayer!.staticTracks.keys.contains(id) == false {
+                    return id
+                }
+
+                id += 1
+            }
+        }
     }
 }
 
@@ -48,17 +68,9 @@ fileprivate class TrackLayer: CALayer {
 
     var trackUtility: TrackUtility?
 
-    var tracks: [[CLLocationCoordinate2D]]? {
-        nil
-    }
-
-    var fogColor: UIColor {
-        UIColor.darkGray
-    }
-
-    var trackColor: UIColor {
-        UIColor.red
-    }
+    // var staticTracks: [[CLLocationCoordinate2D]]?
+    var staticTracks = [TrackRenderer.StaticTrackID: [CLLocationCoordinate2D]]()
+    var dynamicTracks: [CLLocationCoordinate2D]?
 
     var mapView: MKMapView?
 
@@ -71,12 +83,12 @@ fileprivate class TrackLayer: CALayer {
             UIGraphicsPushContext(ctx)
 
             if rendererMode == .fog {
-                fogColor.withAlphaComponent(0.75).setFill()
+                trackUtility!.fogColor.setFill()
                 UIColor.clear.setStroke()
                 ctx.fill(mapView.frame)
                 ctx.setBlendMode(.clear)
             } else if rendererMode == .clear {
-                ctx.setStrokeColor(trackColor.withAlphaComponent(0.5).cgColor)
+                ctx.setStrokeColor(trackUtility!.trackColor.cgColor)
             }
 
             if let lineWidth = trackUtility?.lineWidth {
@@ -105,10 +117,12 @@ fileprivate class TrackLayer: CALayer {
         // Track
         let trackBezierPath = UIBezierPath()
 
-        if let tracks = self.tracks {
-            for coordinates in tracks {
-                trackBezierPath.append(generateTrack(coordinates: coordinates))
-            }
+        for (_, coordinates) in staticTracks {
+            trackBezierPath.append(generateTrack(coordinates: coordinates))
+        }
+
+        if let coordinates = dynamicTracks {
+            trackBezierPath.append(generateTrack(coordinates: coordinates))
         }
 
         trackBezierPath.lineJoinStyle = .round

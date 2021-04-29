@@ -48,7 +48,7 @@ class TrackUtility {
     private var _fogColor: UIColor = UIColor.darkGray
     var fogColor: UIColor {
         get {
-            return _fogColor.withAlphaComponent(0.5)
+            return _fogColor.withAlphaComponent(0.75)
         }
         set {
             _fogColor = newValue

@@ -22,7 +22,7 @@ struct MapView: UIViewRepresentable {
 
         // Restruct -------------------- str
         mapViewState.initRendererManager(mkMapView: mapView)
-        mapViewState.rendererManager?.trackRenderer.addStaticTrackTrack(coordinates: mapViewState.tracks)
+        mapViewState.rendererManager?.trackRenderer.addStaticTrack(coordinates: mapViewState.tracks)
         // Restruct -------------------- end
 
         /*

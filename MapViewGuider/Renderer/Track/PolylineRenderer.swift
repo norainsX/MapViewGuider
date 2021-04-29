@@ -8,8 +8,8 @@
 import MapKit
 
 class PolylineRenderer: TrackUtility, TrackRenderer {
-    private var dynamicTrackPolyline: MKPolyline?
-    private var staticPolylines = [StaticTrackID: MKPolyline]()
+    private var dynamicTrack: MKPolyline?
+    private var staticTracks = [StaticTrackID: MKPolyline]()
     private var rendererMode = RendererMode.clear
 
     func createPolylineRenderer(overlay: MKOverlay) -> MKPolylineRenderer {
@@ -35,20 +35,20 @@ class PolylineRenderer: TrackUtility, TrackRenderer {
         mkMapView!.addOverlay(newPolyline)
 
         // Remove the old polyline if need
-        if let dynamicTrackPolyline = self.dynamicTrackPolyline {
-            mkMapView!.removeOverlay(dynamicTrackPolyline)
+        if let dynamicTrack = self.dynamicTrack {
+            mkMapView!.removeOverlay(dynamicTrack)
         }
 
-        dynamicTrackPolyline = newPolyline
+        dynamicTrack = newPolyline
     }
 
     private var newStaticTrackID: StaticTrackID {
-        if staticPolylines.count == 0 {
+        if staticTracks.count == 0 {
             return 0
         } else {
             var id: StaticTrackID = 0
             while true {
-                if staticPolylines.keys.contains(id) == false {
+                if staticTracks.keys.contains(id) == false {
                     return id
                 }
 
@@ -57,29 +57,29 @@ class PolylineRenderer: TrackUtility, TrackRenderer {
         }
     }
 
-    func addStaticTrackTrack(coordinates: [CLLocationCoordinate2D]) -> StaticTrackID {
+    func addStaticTrack(coordinates: [CLLocationCoordinate2D]) -> StaticTrackID {
         let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
         mkMapView!.addOverlay(polyline)
 
-        let newStaticTrackID = self.newStaticTrackID
-        staticPolylines[newStaticTrackID] = polyline
+        let newID = self.newStaticTrackID
+        staticTracks[newID] = polyline
 
-        return newStaticTrackID
+        return newID
     }
 
     func removeStaticTrack(staticTrackID: StaticTrackID) {
-        if let polyline = staticPolylines[staticTrackID] {
+        if let polyline = staticTracks[staticTrackID] {
             mkMapView!.removeOverlay(polyline)
-            staticPolylines[staticTrackID] = nil
+            staticTracks[staticTrackID] = nil
         }
     }
 
     func removeAllStaticTrack() {
-        for (_, polyline) in staticPolylines {
+        for (_, polyline) in staticTracks {
             mkMapView!.removeOverlay(polyline)
         }
 
-        staticPolylines.removeAll()
+        staticTracks.removeAll()
     }
 }
 
