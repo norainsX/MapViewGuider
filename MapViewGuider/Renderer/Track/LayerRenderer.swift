@@ -17,6 +17,14 @@ class LayerRenderer: TrackUtility, TrackRenderer {
 
         trackLayer = TrackLayer()
         trackLayer!.trackUtility = self
+        trackLayer!.mkMapView = mkMapView
+    }
+
+    func open() -> Bool {
+        trackLayer!.frame = UIScreen.main.bounds
+        trackLayer!.displayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
+        trackLayer!.setNeedsDisplay()
+        return true
     }
 
     var CALayer: CALayer? {
@@ -72,14 +80,14 @@ fileprivate class TrackLayer: CALayer {
     var staticTracks = [TrackRenderer.StaticTrackID: [CLLocationCoordinate2D]]()
     var dynamicTracks: [CLLocationCoordinate2D]?
 
-    var mapView: MKMapView?
+    var mkMapView: MKMapView?
 
     private var trackBezierPath: UIBezierPath?
 
     // MARK: - CALayer
 
     override func draw(in ctx: CGContext) {
-        if let mapView = self.mapView {
+        if let mapView = mkMapView {
             UIGraphicsPushContext(ctx)
 
             if rendererMode == .fog {
@@ -109,7 +117,7 @@ fileprivate class TrackLayer: CALayer {
     }()
 
     @objc func updateDisplayLink() {
-        if mapView == nil {
+        if mkMapView == nil {
             // Do nothing
             return
         }
@@ -138,7 +146,7 @@ fileprivate class TrackLayer: CALayer {
     }
 
     func generateCircle(coordinate: CLLocationCoordinate2D, radius: CGFloat) -> UIBezierPath? {
-        if let mapView = self.mapView {
+        if let mapView = mkMapView {
             let point = mapView.convert(coordinate, toPointTo: mapView)
             return BezierPath.generateCircle(arcCenter: point, radius: radius)
         } else {
@@ -159,7 +167,7 @@ fileprivate class TrackLayer: CALayer {
     }
 
     func checkValidNewPoint(points: [CGPoint], coordinate: CLLocationCoordinate2D) -> CGPoint? {
-        if let mapView = self.mapView {
+        if let mapView = mkMapView {
             let point = mapView.convert(coordinate, toPointTo: mapView)
             if points.count == 0 {
                 return point

@@ -21,7 +21,17 @@ struct MapView: UIViewRepresentable {
         mapView.addAnnotation(mapViewState.pinAnnotation!)
 
         // Restruct -------------------- str
-        mapViewState.initRendererManager(mkMapView: mapView)
+        // The .layer is temporary value
+        mapViewState.initRendererManager(mkMapView: mapView, rendererType: .layer)
+        mapViewState.rendererManager?.trackRenderer.open()
+
+        // mapViewState.rendererManager?.trackRenderer.switchRendererMode(rendererMode: .clear)
+
+        if let layer = mapViewState.rendererManager?.trackRenderer.CALayer {
+            mapView.layer.addSublayer(layer)
+        }
+
+        // The temp coordinates for testing only
         mapViewState.rendererManager?.trackRenderer.addStaticTrack(coordinates: mapViewState.tracks)
         // Restruct -------------------- end
 
