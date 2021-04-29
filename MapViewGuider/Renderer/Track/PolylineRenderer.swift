@@ -9,19 +9,13 @@ import MapKit
 
 class PolylineRenderer: TrackUtility, TrackRenderer {
     private var dynamicTrackPolyline: MKPolyline?
-    private var trackPolylineRenderer: TrackPolylineRenderer?
     private var staticPolylines = [StaticTrackID: MKPolyline]()
     private var rendererMode = RendererMode.clear
 
-    override init(mkMapView: MKMapView) {
-        super.init(mkMapView: mkMapView)
-
-        trackPolylineRenderer = TrackPolylineRenderer()
-        trackPolylineRenderer!.trackUtility = self
-    }
-
     func createPolylineRenderer(overlay: MKOverlay) -> MKPolylineRenderer {
-        return TrackPolylineRenderer(overlay: overlay)
+        let trackPolylineRenderer = TrackPolylineRenderer(overlay: overlay)
+        trackPolylineRenderer.trackUtility = self
+        return trackPolylineRenderer
     }
 
     func switchRendererMode(rendererMode: RendererMode) -> Bool {
