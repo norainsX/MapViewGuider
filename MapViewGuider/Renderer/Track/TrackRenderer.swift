@@ -23,8 +23,6 @@ enum RendererMode: Int, CaseIterable, Codable {
 }
 
 protocol TrackRenderer {
-    @discardableResult func switchRendererMode(rendererMode: RendererMode) -> Bool
-
     func createPolylineRenderer(overlay: MKOverlay) -> MKPolylineRenderer
 
     var fogColor: UIColor {

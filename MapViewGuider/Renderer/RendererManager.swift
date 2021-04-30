@@ -17,7 +17,7 @@ class RendererManager {
         self.mkMapView = mkMapView
         self.rendererType = rendererType
         trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, rendererType: rendererType)
-        (trackRenderer as! TrackUtility).open()
+        (trackRenderer as! RendererUtility).open()
 
         if rendererType == .layer {
             displayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
@@ -36,10 +36,10 @@ class RendererManager {
         }
 
         // Release the resource
-        (trackRenderer as! TrackUtility).close()
+        (trackRenderer as! RendererUtility).close()
 
         trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, rendererType: rendererType)
-        (trackRenderer as! TrackUtility).open()
+        (trackRenderer as! RendererUtility).open()
     }
 
     private static func createNewTrackRender(mkMapView: MKMapView, rendererType: RendererType) -> TrackRenderer {

@@ -8,19 +8,11 @@
 
 import MapKit
 
-class TrackUtility {
+class TrackUtility: RendererUtility {
     private(set) var mkMapView: MKMapView?
 
     init(mkMapView: MKMapView) {
         self.mkMapView = mkMapView
-    }
-    
-    @discardableResult func open() -> Bool{
-        return true
-    }
-    
-    func close(){
-        
     }
 
     var lineWidth: CGFloat? {

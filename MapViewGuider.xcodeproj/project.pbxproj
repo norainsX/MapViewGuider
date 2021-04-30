@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		96823C36263C527C0080068E /* LocationRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96823C35263C527C0080068E /* LocationRenderer.swift */; };
+		96823C3B263C595C0080068E /* RendererUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96823C3A263C595C0080068E /* RendererUtility.swift */; };
 		96E6D4CF24064C2D005B1A57 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D4CE24064C2D005B1A57 /* AppDelegate.swift */; };
 		96E6D4D124064C2D005B1A57 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D4D024064C2D005B1A57 /* SceneDelegate.swift */; };
 		96E6D4D324064C2D005B1A57 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E6D4D224064C2D005B1A57 /* ContentView.swift */; };
@@ -49,6 +51,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		96823C35263C527C0080068E /* LocationRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRenderer.swift; sourceTree = "<group>"; };
+		96823C3A263C595C0080068E /* RendererUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererUtility.swift; sourceTree = "<group>"; };
 		96E6D4CB24064C2D005B1A57 /* MapViewGuider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapViewGuider.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96E6D4CE24064C2D005B1A57 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		96E6D4D024064C2D005B1A57 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -179,6 +183,8 @@
 				96F7F3212639B39600BA4DF8 /* Track */,
 				96F7F2FC263702F300BA4DF8 /* RendererManager.swift */,
 				96F7F3122639AF1D00BA4DF8 /* AnnotationRenderer.swift */,
+				96823C35263C527C0080068E /* LocationRenderer.swift */,
+				96823C3A263C595C0080068E /* RendererUtility.swift */,
 			);
 			path = Renderer;
 			sourceTree = "<group>";
@@ -338,8 +344,10 @@
 				96E6D4D124064C2D005B1A57 /* SceneDelegate.swift in Sources */,
 				96E6D516240760AD005B1A57 /* SecondContentView.swift in Sources */,
 				96E6D50124065913005B1A57 /* MapViewState.swift in Sources */,
+				96823C36263C527C0080068E /* LocationRenderer.swift in Sources */,
 				96E6D4D324064C2D005B1A57 /* ContentView.swift in Sources */,
 				96F7F302263702F400BA4DF8 /* PolylineRenderer.swift in Sources */,
+				96823C3B263C595C0080068E /* RendererUtility.swift in Sources */,
 				96F7F301263702F400BA4DF8 /* LayerRenderer.swift in Sources */,
 				96E6D5142407426F005B1A57 /* PinAnnotation.swift in Sources */,
 			);

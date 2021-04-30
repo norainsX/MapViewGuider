@@ -10,7 +10,7 @@ import MapKit
 
 class LayerRenderer: TrackUtility, TrackRenderer {
     private var rendererMode = RendererMode.clear
-    private(set) var trackLayer: TrackLayer?
+    private var trackLayer: TrackLayer?
 
     override init(mkMapView: MKMapView) {
         super.init(mkMapView: mkMapView)
@@ -20,7 +20,7 @@ class LayerRenderer: TrackUtility, TrackRenderer {
         trackLayer!.mkMapView = mkMapView
     }
 
-    override func open() -> Bool {
+    func open() -> Bool {
         super.open()
 
         trackLayer!.frame = UIScreen.main.bounds
@@ -28,7 +28,7 @@ class LayerRenderer: TrackUtility, TrackRenderer {
         return true
     }
 
-    override func close() {
+    func close() {
         super.close()
 
         mkMapView!.layer.removeFromSuperlayer()
@@ -78,7 +78,7 @@ class LayerRenderer: TrackUtility, TrackRenderer {
     }
 }
 
-class TrackLayer: CALayer {
+fileprivate class TrackLayer: CALayer {
     var rendererMode = RendererMode.fog
 
     var trackUtility: TrackUtility?
