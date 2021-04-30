@@ -43,6 +43,10 @@ protocol TrackRenderer {
     @discardableResult func addStaticTrack(coordinates: [CLLocationCoordinate2D]) -> StaticTrackID
     func removeStaticTrack(staticTrackID: StaticTrackID)
     func removeAllStaticTrack()
+
+    // For the layer renderer only
+
+    func onUpdateDisplayLink()
 }
 
 extension TrackRenderer {
@@ -50,7 +54,6 @@ extension TrackRenderer {
         return MKPolylineRenderer()
     }
 
-    var CALayer: CALayer? {
-        return nil
+    func onUpdateDisplayLink() {
     }
 }

@@ -10,7 +10,7 @@ import MapKit
 
 class LayerRenderer: TrackUtility, TrackRenderer {
     private var rendererMode = RendererMode.clear
-    private var trackLayer: TrackLayer?
+    private(set) var trackLayer: TrackLayer?
 
     override init(mkMapView: MKMapView) {
         super.init(mkMapView: mkMapView)
@@ -21,12 +21,21 @@ class LayerRenderer: TrackUtility, TrackRenderer {
     }
 
     override func open() -> Bool {
-        trackLayer!.frame = UIScreen.main.bounds
-        trackLayer!.displayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
-        trackLayer!.setNeedsDisplay()
+        super.open()
 
+        trackLayer!.frame = UIScreen.main.bounds
         mkMapView!.layer.addSublayer(trackLayer!)
         return true
+    }
+
+    override func close() {
+        super.close()
+
+        mkMapView!.layer.removeFromSuperlayer()
+    }
+
+    func onUpdateDisplayLink() {
+        trackLayer?.onUpdateDisplayLink()
     }
 
     func switchRendererMode(rendererMode: RendererMode) -> Bool {
@@ -69,7 +78,7 @@ class LayerRenderer: TrackUtility, TrackRenderer {
     }
 }
 
-fileprivate class TrackLayer: CALayer {
+class TrackLayer: CALayer {
     var rendererMode = RendererMode.fog
 
     var trackUtility: TrackUtility?
@@ -109,12 +118,7 @@ fileprivate class TrackLayer: CALayer {
 
     // MARK: - CADisplayLink
 
-    lazy var displayLink: CADisplayLink = {
-        let link = CADisplayLink(target: self, selector: #selector(self.updateDisplayLink))
-        return link
-    }()
-
-    @objc func updateDisplayLink() {
+    func onUpdateDisplayLink() {
         if mkMapView == nil {
             // Do nothing
             return
@@ -178,19 +182,5 @@ fileprivate class TrackLayer: CALayer {
             }
         }
         return nil
-    }
-
-    private var debouncer: Debouncer?
-    func adjustPreferredFramesPerSecond() {
-        let adjustDelay = 30 * 1000 // 30s
-        displayLink.preferredFramesPerSecond = 0
-
-        if debouncer == nil {
-            debouncer = Debouncer(delayMilliseconds: adjustDelay) {
-                self.displayLink.preferredFramesPerSecond = 1
-            }
-        }
-
-        debouncer?.restart()
     }
 }

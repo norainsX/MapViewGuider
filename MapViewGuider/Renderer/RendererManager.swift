@@ -18,6 +18,10 @@ class RendererManager {
         self.rendererType = rendererType
         trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, rendererType: rendererType)
         (trackRenderer as! TrackUtility).open()
+
+        if rendererType == .layer {
+            displayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
+        }
     }
 
     enum RendererType: Int {
@@ -44,5 +48,30 @@ class RendererManager {
         } else {
             return PolylineRenderer(mkMapView: mkMapView)
         }
+    }
+
+    // MARK: - CADisplayLink
+
+    lazy var displayLink: CADisplayLink = {
+        let link = CADisplayLink(target: self, selector: #selector(self.updateDisplayLink))
+        return link
+    }()
+
+    @objc func updateDisplayLink() {
+        trackRenderer.onUpdateDisplayLink()
+    }
+
+    private var debouncer: Debouncer?
+    func adjustPreferredFramesPerSecond() {
+        let adjustDelay = 30 * 1000 // 30s
+        displayLink.preferredFramesPerSecond = 0
+
+        if debouncer == nil {
+            debouncer = Debouncer(delayMilliseconds: adjustDelay) {
+                self.displayLink.preferredFramesPerSecond = 1
+            }
+        }
+
+        debouncer?.restart()
     }
 }
