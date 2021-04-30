@@ -25,9 +25,6 @@ enum RendererMode: Int, CaseIterable, Codable {
 protocol TrackRenderer {
     @discardableResult func switchRendererMode(rendererMode: RendererMode) -> Bool
 
-    @discardableResult func open() -> Bool
-    func close()
-
     func createPolylineRenderer(overlay: MKOverlay) -> MKPolylineRenderer
 
     var fogColor: UIColor {
@@ -55,13 +52,5 @@ extension TrackRenderer {
 
     var CALayer: CALayer? {
         return nil
-    }
-
-    func open() -> Bool {
-        return true
-    }
-
-    func close() {
-        // Do nothing
     }
 }

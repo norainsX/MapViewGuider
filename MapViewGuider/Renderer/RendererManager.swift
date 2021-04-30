@@ -17,6 +17,7 @@ class RendererManager {
         self.mkMapView = mkMapView
         self.rendererType = rendererType
         trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, rendererType: rendererType)
+        (trackRenderer as! TrackUtility).open()
     }
 
     enum RendererType: Int {
@@ -31,10 +32,10 @@ class RendererManager {
         }
 
         // Release the resource
-        trackRenderer.close()
+        (trackRenderer as! TrackUtility).close()
 
         trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, rendererType: rendererType)
-        trackRenderer.open()
+        (trackRenderer as! TrackUtility).open()
     }
 
     private static func createNewTrackRender(mkMapView: MKMapView, rendererType: RendererType) -> TrackRenderer {

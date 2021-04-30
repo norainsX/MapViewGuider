@@ -20,7 +20,7 @@ class LayerRenderer: TrackUtility, TrackRenderer {
         trackLayer!.mkMapView = mkMapView
     }
 
-    func open() -> Bool {
+    override func open() -> Bool {
         trackLayer!.frame = UIScreen.main.bounds
         trackLayer!.displayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
         trackLayer!.setNeedsDisplay()
