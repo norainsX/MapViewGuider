@@ -18,7 +18,7 @@ class PolylineRenderer: TrackUtility, TrackRenderer {
         return trackPolylineRenderer
     }
 
-    func switchRendererMode(rendererMode: RendererMode) -> Bool {
+    override func switchRendererMode(rendererMode: RendererMode) -> Bool {
         if rendererMode == .fog {
             print("[Error]PolylineRenderer does not support fog mode!")
             return false

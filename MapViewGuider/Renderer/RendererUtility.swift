@@ -15,16 +15,3 @@ protocol RendererUtility {
 
     func close()
 }
-
-extension RendererUtility {
-    func open() -> Bool {
-        return true
-    }
-
-    func close() {
-    }
-    
-    func switchRendererMode(rendererMode: RendererMode) -> Bool{
-        return false
-    }
-}

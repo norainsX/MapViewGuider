@@ -9,6 +9,13 @@
 import MapKit
 
 class LocationRenderer: RendererUtility {
+    func open() -> Bool {
+        return true
+    }
+
+    func close() {
+    }
+
     private var coordinateLayer: CoordinateLayer?
 
     init(mkMapView: MKMapView, rendererMode: RendererMode) {

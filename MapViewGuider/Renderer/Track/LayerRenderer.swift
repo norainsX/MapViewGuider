@@ -20,7 +20,7 @@ class LayerRenderer: TrackUtility, TrackRenderer {
         trackLayer!.mkMapView = mkMapView
     }
 
-    func open() -> Bool {
+    override func open() -> Bool {
         super.open()
 
         trackLayer!.frame = UIScreen.main.bounds
@@ -28,7 +28,7 @@ class LayerRenderer: TrackUtility, TrackRenderer {
         return true
     }
 
-    func close() {
+    override func close() {
         super.close()
 
         mkMapView!.layer.removeFromSuperlayer()
@@ -38,7 +38,7 @@ class LayerRenderer: TrackUtility, TrackRenderer {
         trackLayer?.onUpdateDisplayLink()
     }
 
-    func switchRendererMode(rendererMode: RendererMode) -> Bool {
+    override func switchRendererMode(rendererMode: RendererMode) -> Bool {
         self.rendererMode = rendererMode
         trackLayer!.rendererMode = rendererMode
         return true

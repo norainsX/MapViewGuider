@@ -9,6 +9,18 @@
 import MapKit
 
 class TrackUtility: RendererUtility {
+    func switchRendererMode(rendererMode: RendererMode) -> Bool {
+        return true
+    }
+    
+    @discardableResult func open() -> Bool {
+        return true
+    }
+    
+    func close() {
+        
+    }
+    
     private(set) var mkMapView: MKMapView?
 
     init(mkMapView: MKMapView) {
