@@ -34,7 +34,7 @@ class RendererManager {
         self.trackRendererType = trackRendererType
         self.rendererMode = rendererMode
 
-        trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, trackRendererType: trackRendererType)
+        trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, rendererMode: rendererMode, trackRendererType: trackRendererType)
         (trackRenderer as! RendererUtility).open()
 
         locationRenderer = LocationRenderer(mkMapView: mkMapView, rendererMode: rendererMode)
@@ -59,13 +59,13 @@ class RendererManager {
         // Release the resource
         (trackRenderer as! RendererUtility).close()
 
-        trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, trackRendererType: trackRendererType)
+        trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, rendererMode: rendererMode, trackRendererType: trackRendererType)
         (trackRenderer as! RendererUtility).open()
     }
 
-    private static func createNewTrackRender(mkMapView: MKMapView, trackRendererType: TrackRendererType) -> TrackRenderer {
+    private static func createNewTrackRender(mkMapView: MKMapView, rendererMode: RendererMode, trackRendererType: TrackRendererType) -> TrackRenderer {
         if trackRendererType == .layer {
-            return LayerRenderer(mkMapView: mkMapView)
+            return LayerRenderer(mkMapView: mkMapView, rendererMode: rendererMode)
         } else {
             return PolylineRenderer(mkMapView: mkMapView)
         }
