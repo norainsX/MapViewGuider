@@ -8,19 +8,7 @@
 
 import MapKit
 
-enum RendererMode: Int, CaseIterable, Codable {
-    case clear
-    case fog
 
-    var localizedDescription: String {
-        switch self {
-        case .clear:
-            return NSLocalizedString("Clear", comment: "")
-        case .fog:
-            return NSLocalizedString("Fog", comment: "")
-        }
-    }
-}
 
 protocol TrackRenderer {
     func createPolylineRenderer(overlay: MKOverlay) -> MKPolylineRenderer

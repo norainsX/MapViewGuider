@@ -21,8 +21,8 @@ class MapViewState: ObservableObject {
     // Restruct -------------------- str
     private(set) var rendererManager: RendererManager?
 
-    func initRendererManager(mkMapView: MKMapView, rendererType: RendererManager.RendererType = .polyline) {
-        rendererManager = RendererManager(mkMapView: mkMapView, rendererType: rendererType)
+    func initRendererManager(mkMapView: MKMapView, trackRendererType: RendererManager.TrackRendererType = .polyline) {
+        rendererManager = RendererManager(mkMapView: mkMapView, trackRendererType: trackRendererType)
     }
     // Restruct -------------------- end
 

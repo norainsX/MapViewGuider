@@ -22,7 +22,7 @@ struct MapView: UIViewRepresentable {
 
         // Restruct -------------------- str
         // The .layer is temporary value
-        mapViewState.initRendererManager(mkMapView: mapView, rendererType: .layer)
+        mapViewState.initRendererManager(mkMapView: mapView, trackRendererType: .layer)
         
 
         // mapViewState.rendererManager?.trackRenderer.switchRendererMode(rendererMode: .clear)

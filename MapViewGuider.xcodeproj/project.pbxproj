@@ -108,6 +108,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		96160F02263D9D80002D5E7A /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				96823C35263C527C0080068E /* LocationRenderer.swift */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
+		96160F03263D9D91002D5E7A /* Annotation */ = {
+			isa = PBXGroup;
+			children = (
+				96F7F3122639AF1D00BA4DF8 /* AnnotationRenderer.swift */,
+			);
+			path = Annotation;
+			sourceTree = "<group>";
+		};
 		96E6D4C224064C2D005B1A57 = {
 			isa = PBXGroup;
 			children = (
@@ -180,10 +196,10 @@
 		96F7F2E32635B87300BA4DF8 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
+				96160F03263D9D91002D5E7A /* Annotation */,
+				96160F02263D9D80002D5E7A /* Location */,
 				96F7F3212639B39600BA4DF8 /* Track */,
 				96F7F2FC263702F300BA4DF8 /* RendererManager.swift */,
-				96F7F3122639AF1D00BA4DF8 /* AnnotationRenderer.swift */,
-				96823C35263C527C0080068E /* LocationRenderer.swift */,
 				96823C3A263C595C0080068E /* RendererUtility.swift */,
 			);
 			path = Renderer;

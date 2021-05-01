@@ -10,7 +10,6 @@ import MapKit
 class PolylineRenderer: TrackUtility, TrackRenderer {
     private var dynamicTrack: MKPolyline?
     private var staticTracks = [StaticTrackID: MKPolyline]()
-    private var rendererMode = RendererMode.clear
 
     func createPolylineRenderer(overlay: MKOverlay) -> MKPolylineRenderer {
         let trackPolylineRenderer = TrackPolylineRenderer(overlay: overlay)
@@ -23,8 +22,6 @@ class PolylineRenderer: TrackUtility, TrackRenderer {
             print("[Error]PolylineRenderer does not support fog mode!")
             return false
         }
-
-        self.rendererMode = rendererMode
 
         return true
     }
@@ -61,7 +58,7 @@ class PolylineRenderer: TrackUtility, TrackRenderer {
         let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
         mkMapView!.addOverlay(polyline)
 
-        let newID = self.newStaticTrackID
+        let newID = newStaticTrackID
         staticTracks[newID] = polyline
 
         return newID

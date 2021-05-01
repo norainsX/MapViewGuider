@@ -8,29 +8,50 @@
 
 import MapKit
 
+enum RendererMode: Int, CaseIterable, Codable {
+    case clear
+    case fog
+
+    var localizedDescription: String {
+        switch self {
+        case .clear:
+            return NSLocalizedString("Clear", comment: "")
+        case .fog:
+            return NSLocalizedString("Fog", comment: "")
+        }
+    }
+}
+
 class RendererManager {
     private var mkMapView: MKMapView
     private(set) var trackRenderer: TrackRenderer
-    private var rendererType: RendererType
+    private(set) var locationRenderer: LocationRenderer
+    private var trackRendererType: TrackRendererType
+    private var rendererMode: RendererMode
 
-    init(mkMapView: MKMapView, rendererType: RendererType) {
+    init(mkMapView: MKMapView, rendererMode: RendererMode = .clear, trackRendererType: TrackRendererType = .polyline) {
         self.mkMapView = mkMapView
-        self.rendererType = rendererType
-        trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, rendererType: rendererType)
+        self.trackRendererType = trackRendererType
+        self.rendererMode = rendererMode
+
+        trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, trackRendererType: trackRendererType)
         (trackRenderer as! RendererUtility).open()
 
-        if rendererType == .layer {
+        locationRenderer = LocationRenderer(mkMapView: mkMapView, rendererMode: rendererMode)
+        locationRenderer.open()
+
+        if trackRendererType == .layer {
             displayLink.add(to: RunLoop.main, forMode: RunLoop.Mode.common)
         }
     }
 
-    enum RendererType: Int {
+    enum TrackRendererType: Int {
         case polyline
         case layer
     }
 
-    func switchTrackRenderer(rendererType: RendererType) {
-        if self.rendererType == rendererType {
+    func switchTrackRenderer(trackRendererType: TrackRendererType) {
+        if self.trackRendererType == trackRendererType {
             // Do nothing
             return
         }
@@ -38,12 +59,12 @@ class RendererManager {
         // Release the resource
         (trackRenderer as! RendererUtility).close()
 
-        trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, rendererType: rendererType)
+        trackRenderer = RendererManager.createNewTrackRender(mkMapView: mkMapView, trackRendererType: trackRendererType)
         (trackRenderer as! RendererUtility).open()
     }
 
-    private static func createNewTrackRender(mkMapView: MKMapView, rendererType: RendererType) -> TrackRenderer {
-        if rendererType == .layer {
+    private static func createNewTrackRender(mkMapView: MKMapView, trackRendererType: TrackRendererType) -> TrackRenderer {
+        if trackRendererType == .layer {
             return LayerRenderer(mkMapView: mkMapView)
         } else {
             return PolylineRenderer(mkMapView: mkMapView)

@@ -9,15 +9,15 @@
 import MapKit
 
 class LayerRenderer: TrackUtility, TrackRenderer {
-    private var rendererMode = RendererMode.clear
     private var trackLayer: TrackLayer?
 
-    override init(mkMapView: MKMapView) {
+    init(mkMapView: MKMapView, rendererMode: RendererMode = .clear) {
         super.init(mkMapView: mkMapView)
 
         trackLayer = TrackLayer()
         trackLayer!.trackUtility = self
         trackLayer!.mkMapView = mkMapView
+        trackLayer!.rendererMode = rendererMode
     }
 
     override func open() -> Bool {
@@ -39,7 +39,6 @@ class LayerRenderer: TrackUtility, TrackRenderer {
     }
 
     override func switchRendererMode(rendererMode: RendererMode) -> Bool {
-        self.rendererMode = rendererMode
         trackLayer!.rendererMode = rendererMode
         return true
     }
