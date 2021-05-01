@@ -11,6 +11,7 @@ import MapKit
 class LocationRenderer: RendererUtility {
     
     @discardableResult func open() -> Bool {
+        coordinateLayer!.frame = UIScreen.main.bounds
         coordinateLayer!.mkMapView!.layer.addSublayer(coordinateLayer!)
         return true
     }
