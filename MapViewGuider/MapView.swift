@@ -23,12 +23,12 @@ struct MapView: UIViewRepresentable {
         // Restruct -------------------- str
         // The .layer is temporary value
         mapViewState.initRendererManager(mkMapView: mapView, trackRendererType: .layer)
-        
 
         // mapViewState.rendererManager?.trackRenderer.switchRendererMode(rendererMode: .clear)
 
         // The temp coordinates for testing only
         mapViewState.rendererManager?.trackRenderer.addStaticTrack(coordinates: mapViewState.tracks)
+        mapViewState.rendererManager?.locationRenderer.updateCoordinate(coordinate: mapViewState.tracks[0])
         // Restruct -------------------- end
 
         /*

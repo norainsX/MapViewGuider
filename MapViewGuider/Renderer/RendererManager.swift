@@ -80,6 +80,7 @@ class RendererManager {
 
     @objc func updateDisplayLink() {
         trackRenderer.onUpdateDisplayLink()
+        locationRenderer.onUpdateDisplayLink()
     }
 
     private var debouncer: Debouncer?

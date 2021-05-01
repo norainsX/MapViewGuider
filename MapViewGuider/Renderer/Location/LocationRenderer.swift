@@ -9,11 +9,14 @@
 import MapKit
 
 class LocationRenderer: RendererUtility {
-    func open() -> Bool {
+    
+    @discardableResult func open() -> Bool {
+        coordinateLayer!.mkMapView!.layer.addSublayer(coordinateLayer!)
         return true
     }
 
     func close() {
+        coordinateLayer!.mkMapView!.layer.removeFromSuperlayer()
     }
 
     private var coordinateLayer: CoordinateLayer?
@@ -43,9 +46,6 @@ fileprivate class CoordinateLayer: CALayer {
 
     var mkMapView: MKMapView?
     var coordinate: CLLocationCoordinate2D?
-
-    override func draw(in ctx: CGContext) {
-    }
 
     private var locationMarkReverseIndex = false
     private let locationMarkMinIndex: CGFloat = 0
@@ -97,7 +97,7 @@ fileprivate class CoordinateLayer: CALayer {
         return (locationMarkOutlineBezierPath, locationMarkInnerBezierPath)
     }
 
-    private func drawLocationMark(in ctx: CGContext) {
+    override func draw(in ctx: CGContext) {
         UIGraphicsPushContext(ctx)
 
         if rendererMode == .fog {
@@ -107,7 +107,7 @@ fileprivate class CoordinateLayer: CALayer {
         }
 
         let outlineColor: CGColor = UIColor.white.cgColor
-        let innerColor: CGColor = UIColor(named: "CurrentLocationMark")!.cgColor
+        let innerColor: CGColor = UIColor(red: 0.036, green: 0.518, blue: 0.996, alpha: 1.0).cgColor
 
         ctx.setBlendMode(.normal)
 
@@ -136,6 +136,12 @@ fileprivate class CoordinateLayer: CALayer {
     // MARK: - CADisplayLink
 
     func onUpdateDisplayLink() {
-        setNeedsDisplay()
+        if let coordinate = self.coordinate {
+            let result = generateLocationMarkNextFrame(coordinate: coordinate)
+            locationMarkInnerBezierPath = result.locationMarkInnerBezierPath
+            locationMarkOutlineBezierPath = result.locationMarkOutlineBezierPath
+
+            setNeedsDisplay()
+        }
     }
 }
